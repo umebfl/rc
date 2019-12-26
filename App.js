@@ -12,7 +12,6 @@ import style from './style'
 
 const bg = require('./pic/bg.jpg')
 
-
 const App: () => React$Node = () => {
     return (
         <View style={style.main}>
