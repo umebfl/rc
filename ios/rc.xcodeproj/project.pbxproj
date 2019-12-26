@@ -20,6 +20,8 @@
 		2DCD954D1E0B4F2C00145EB5 /* rcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* rcTests.m */; };
 		56E86CB25FA389E0666A551E /* libPods-rc-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 262E834BB191A3C3E8F979D6 /* libPods-rc-tvOSTests.a */; };
 		F11181802FD331A01D644901 /* libPods-rcTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBAA479F187ECC3D7E88C38D /* libPods-rcTests.a */; };
+		07261CDBF0394D07AFB09A44 /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E47E1613855B43038A3FEF33 /* antfill.ttf */; };
+		7F7B79B8DB8449DC829E8429 /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C6D6AAD523746F1A87D0589 /* antoutline.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FBAA479F187ECC3D7E88C38D /* libPods-rcTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rcTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E47E1613855B43038A3FEF33 /* antfill.ttf */ = {isa = PBXFileReference; name = "antfill.ttf"; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3C6D6AAD523746F1A87D0589 /* antoutline.ttf */ = {isa = PBXFileReference; name = "antoutline.ttf"; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +184,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				63F639B3FAB174ACEB2C0C47 /* Pods */,
+				DBBE6DAA1E9E4714AAC60031 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -196,6 +201,16 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		DBBE6DAA1E9E4714AAC60031 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				E47E1613855B43038A3FEF33 /* antfill.ttf */,
+				3C6D6AAD523746F1A87D0589 /* antoutline.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -284,7 +299,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -343,6 +358,8 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				07261CDBF0394D07AFB09A44 /* antfill.ttf in Resources */,
+				7F7B79B8DB8449DC829E8429 /* antoutline.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

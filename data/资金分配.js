@@ -1,6 +1,7 @@
 export default [
     {
         type: '支出',
+        msg: `生活2000 房租3500 车贷3600(余${82400 - 15000 - 26000 - 4000})`,
         list: [
             {
                 id: '花呗',
@@ -24,13 +25,14 @@ export default [
     },
     {
         type: '去杠杆',
+        msg: '剩余家贷21万',
         list: [
-            {
-                id: '招闪',
-                money: 2900,
-                total: 300000,
-                balance: 0,
-            },
+            // {
+            //     id: '招闪',
+            //     money: 2900,
+            //     total: 300000,
+            //     balance: 0,
+            // },
             // 家贷
             {
                 id: '家贷',
@@ -44,6 +46,7 @@ export default [
     },
     {
         type: '职业认证',
+        msg: '风控学者100万',
     },
     {
         type: '本金扩张',
