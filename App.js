@@ -5,6 +5,7 @@ import {
   View,
   Text,
   ImageBackground,
+  ScrollView,
 } from 'react-native'
 
 import style from './style'
@@ -15,9 +16,9 @@ const App: () => React$Node = () => {
     return (
         <ImageBackground style={style.bg} source={bg}>
             <SafeAreaView>
-                <View style={style.main}>
+                <ScrollView>
                     <Text style={style.footer}>Engine: Hermes</Text>
-                </View>
+                </ScrollView>
             </SafeAreaView>
         </ImageBackground>
     )
