@@ -4,6 +4,9 @@ import {
 
 
 export default StyleSheet.create({
+    bg: {
+        flex: 1,
+    },
     main: {
         backgroundColor: '#333',
         display: 'flex',

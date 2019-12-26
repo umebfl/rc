@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   View,
   Text,
-  StatusBar,
   ImageBackground,
 } from 'react-native'
 
@@ -14,16 +13,13 @@ const bg = require('./pic/bg.jpg')
 
 const App: () => React$Node = () => {
     return (
-        <View style={style.main}>
-            <ImageBackground style={{ flex: 1 }} source={bg}>
-                <StatusBar barStyle='dark-content'/>
-                <SafeAreaView>
-                    <View style={style.main}>
-                        <Text style={style.footer}>Engine: Hermes</Text>
-                    </View>
-                </SafeAreaView>
-            </ImageBackground>
-        </View>
+        <ImageBackground style={style.bg} source={bg}>
+            <SafeAreaView>
+                <View style={style.main}>
+                    <Text style={style.footer}>Engine: Hermes</Text>
+                </View>
+            </SafeAreaView>
+        </ImageBackground>
     )
 }
 
