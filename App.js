@@ -26,6 +26,8 @@ import {
     Toast,
 } from '@ant-design/react-native'
 
+import System from './system'
+
 import _occupational_system from './data/职业体系'
 import _element from './data/元素'
 import _idea from './data/理念'
@@ -35,6 +37,8 @@ import _book from './data/典籍'
 import _flow from './data/流程'
 import _rule from './data/规则'
 import _capital from './data/资金分配'
+import _base_info from './data/基础信息'
+import _breed from './data/品种'
 
 export default class App extends Component {
 
@@ -48,6 +52,8 @@ export default class App extends Component {
         flow: _flow,
         rule: _rule,
         capital: _capital,
+        base_info: _base_info,
+        breed: _breed,
 
         modal_edit: {
             visible: false,
@@ -107,16 +113,35 @@ export default class App extends Component {
             <Provider>
                 <SafeAreaView>
                     <ScrollView>
+                        <WhiteSpace size='lg'/>
                         <Card full style={{borderColor: 'white'}}>
                             <Card.Header
-                                title='交易系统'
-                                thumb={<Icon name='safety' size='md' color='black'/>}/>
-                            <Card.Body>
-                                <View style={{ height: 42 }}>
-
-                                </View>
+                                title='基础信息'
+                                extra={
+                                    <View style={{flexDirection: 'row-reverse'}}>
+                                        <TouchableOpacity style={{padding: 4}} onPress={() => this.handle_modal_edit_open('base_info')}>
+                                            <Icon name='edit' size='md' color='#BBB'/>
+                                        </TouchableOpacity>
+                                    </View>
+                                }
+                                thumb={<Icon name='dashboard' size='md' color='black'/>}/>
+                            <Card.Body style={{borderColor: 'white', paddingLeft: 10}}>
+                                <List>
+                                    {
+                                        R.addIndex(R.map)(
+                                            (v, k) => (
+                                                <List.Item key={v.k} wrap={true} extra={<View><List.Item.Brief>{v.v}</List.Item.Brief></View>}>
+                                                    <Text>{v.k}</Text>
+                                                </List.Item>
+                                            )
+                                        )(this.state.base_info)
+                                    }
+                                </List>
                             </Card.Body>
                         </Card>
+
+                        <System context={this}/>
+
                         <WhiteSpace size='lg'/>
                         <Card full style={{borderColor: 'white'}}>
                             <Card.Header
@@ -131,13 +156,13 @@ export default class App extends Component {
                                 thumb={<Icon name='bank' size='md' color='black'/>}/>
                             <Card.Body style={{borderColor: 'white'}}>
                                 {
-                                    R.map(
-                                        v => (
-                                            <List renderHeader={v.node}>
+                                    R.addIndex(R.map)(
+                                        (v, k) => (
+                                            <List renderHeader={v.node} key={k}>
                                                 {
-                                                    R.map(
-                                                        v => (
-                                                            <List.Item wrap={true}>
+                                                    R.addIndex(R.map)(
+                                                        (v, k) => (
+                                                            <List.Item key={k} wrap={true}>
                                                                 <Text>{v.text}</Text>
                                                                 <View style={{flexDirection: 'row-reverse', marginTop: 6}}>
                                                                     <Tag small selected style={{marginRight: 4}}>{v.key}</Tag>
@@ -168,8 +193,8 @@ export default class App extends Component {
                                 <View style={{ marginLeft: 16, marginTop: 35 }}>
                                     <Steps size='small' current={this.state.flow.length}>
                                         {
-                                            R.map(
-                                                v => <Steps.Step title={v.text} description={<Text style={{fontSize: 12, marginRight: 30}}>{v.msg}</Text>}/>
+                                            R.addIndex(R.map)(
+                                                (v, k) => <Steps.Step key={k} title={v.text} description={<Text style={{fontSize: 12, marginRight: 30}}>{v.msg}</Text>}/>
                                             )(this.state.flow)
                                         }
                                     </Steps>
@@ -191,14 +216,14 @@ export default class App extends Component {
                             <Card.Body style={{borderColor: 'white'}}>
                                 <List>
                                     {
-                                        R.map(
-                                            v => (
-                                                <List.Item wrap={true}>
+                                        R.addIndex(R.map)(
+                                            (v, k) => (
+                                                <List.Item key={k} wrap={true}>
                                                     <Text>{v.content}</Text>
                                                     <View style={{flexDirection: 'row-reverse', marginTop: 6}}>
                                                         {
-                                                            R.map(
-                                                                v => <Tag small selected style={{marginRight: 4}}>{v}</Tag>
+                                                            R.addIndex(R.map)(
+                                                                (v, k) => <Tag key={k} small selected style={{marginRight: 4}}>{v}</Tag>
                                                             )(v.type)
                                                         }
                                                     </View>
@@ -224,8 +249,8 @@ export default class App extends Component {
                             <Card.Body>
                                 <View style={{ flexDirection: 'row', flexWrap: 'wrap'}}>
                                     {
-                                        R.map(
-                                            v => <Text style={{ margin: 6, }}>{v}</Text>
+                                        R.addIndex(R.map)(
+                                            (v, k) => <Text key={k} style={{ margin: 6, }}>{v}</Text>
                                         )(this.state.element)
                                     }
                                 </View>
@@ -246,9 +271,9 @@ export default class App extends Component {
                             <Card.Body style={{borderColor: 'white'}}>
                                 <List>
                                     {
-                                        R.map(
-                                            v => (
-                                                <List.Item wrap={true} extra={<View><List.Item.Brief>{v.msg}</List.Item.Brief></View>}>
+                                        R.addIndex(R.map)(
+                                            (v, k) => (
+                                                <List.Item key={k} wrap={true} extra={<View><List.Item.Brief>{v.msg}</List.Item.Brief></View>}>
                                                     <Text>{v.type}</Text>
                                                 </List.Item>
                                             )
@@ -273,9 +298,9 @@ export default class App extends Component {
                                 <View style={{ marginLeft: 16, marginTop: 35 }}>
                                     <Steps size='small' current={R.reduce((a, b) => a + (b.finish ? 1 : 0), -1)(this.state.target)}>
                                         {
-                                            R.map(
-                                                v => (
-                                                    <Steps.Step title={v.msg} description={
+                                            R.addIndex(R.map)(
+                                                (v, k) => (
+                                                    <Steps.Step key={k} title={v.msg} description={
                                                         <View style={{flexDirection: 'column'}}>
                                                             <Text>{v.money}</Text>
                                                             <Text style={{color: '#108EE9', fontSize: 12, marginTop: 4}}>{v.finish ? v.time : null}</Text>
@@ -304,8 +329,8 @@ export default class App extends Component {
                                 <View style={{ marginLeft: 16, marginTop: 35 }} >
                                     <Steps size='small' current={0}>
                                         {
-                                            R.map(
-                                                v => <Steps.Step title={v.title} description={<Text>{`${v.target_cn} ${v.leader || ''}`}</Text>}/>
+                                            R.addIndex(R.map)(
+                                                (v, k) => <Steps.Step key={k} title={v.title} description={<Text>{`${v.target_cn} ${v.leader || ''}`}</Text>}/>
                                             )(this.state.occupational_system.lv)
                                         }
                                     </Steps>
@@ -327,9 +352,9 @@ export default class App extends Component {
                             <Card.Body style={{borderColor: 'white'}}>
                                 <List>
                                     {
-                                        R.map(
-                                            v => (
-                                                <List.Item wrap={true} extra={<View><List.Item.Brief>{v.author}</List.Item.Brief></View>}>
+                                        R.addIndex(R.map)(
+                                            (v, k) => (
+                                                <List.Item key={k} wrap={true} extra={<View><List.Item.Brief>{v.author}</List.Item.Brief></View>}>
                                                     <Text>{v.name}</Text>
                                                 </List.Item>
                                             )
@@ -352,8 +377,8 @@ export default class App extends Component {
                                 thumb={<Icon name='trophy' size='md' color='black'/>}/>
                             <Card.Body>
                                 {
-                                    R.map(
-                                        v => <Text style={{ marginLeft: 16 }}>{v.date} | {v.msg}</Text>
+                                    R.addIndex(R.map)(
+                                        (v, k) => <Text key={k} style={{ marginLeft: 16 }}>{v.date} | {v.msg}</Text>
                                     )(this.state.annual_account)
                                 }
                             </Card.Body>
