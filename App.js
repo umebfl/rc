@@ -26,7 +26,7 @@ import annual_account from './data/年度结算'
 import target from './data/目标'
 import book from './data/典籍'
 import flow from './data/流程'
-import strategy from './data/交易策略'
+import rule from './data/规则'
 import capital from './data/资金分配'
 
 const App: () => React$Node = () => {
@@ -48,29 +48,27 @@ const App: () => React$Node = () => {
                     <Card.Header
                         title='规则'
                         thumb={<Icon name='bank' size='md' color='black'/>}/>
-                    <Card.Body>
-                        <View style={{ height: 42 }}>
-
-                        </View>
-                    </Card.Body>
-                </Card>
-                <WhiteSpace size='lg'/>
-                <Card full style={{borderColor: 'white'}}>
-                    <Card.Header
-                        title='交易策略'
-                        thumb={<Icon name='insurance' size='md' color='black'/>}/>
                     <Card.Body style={{borderColor: 'white'}}>
-                        <List>
-                            {
-                                R.map(
-                                    v => (
-                                        <List.Item wrap={true}>
-                                            <Text>{v.text}</Text>
-                                        </List.Item>
-                                    )
-                                )(strategy)
-                            }
-                        </List>
+                        {
+                            R.map(
+                                v => (
+                                    <List renderHeader={v.node}>
+                                        {
+                                            R.map(
+                                                v => (
+                                                    <List.Item wrap={true}>
+                                                        <Text>{v.text}</Text>
+                                                        <View style={{flexDirection: 'row-reverse', marginTop: 6}}>
+                                                            <Tag small selected style={{marginRight: 4}}>{v.key}</Tag>
+                                                        </View>
+                                                    </List.Item>
+                                                )
+                                            )(v.rule)
+                                        }
+                                    </List>
+                                )
+                            )(rule)
+                        }
                     </Card.Body>
                 </Card>
                 <WhiteSpace size='lg'/>
@@ -195,7 +193,7 @@ const App: () => React$Node = () => {
                 <Card full style={{borderColor: 'white'}}>
                     <Card.Header
                         title='典籍'
-                        thumb={<Icon name='trophy' size='md' color='black'/>}/>
+                        thumb={<Icon name='read' size='md' color='black'/>}/>
                     <Card.Body style={{borderColor: 'white'}}>
                         <List>
                             {
