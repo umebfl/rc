@@ -27,12 +27,26 @@ import {
     Toast,
 } from '@ant-design/react-native'
 
+import {
+    analy_price,
+    analy_120_to_10,
+    flow,
+}from './flow'
+
+const analy_ensemble = all_day => {
+    return {
+        analy_120_80_40_20_10: analy_120_to_10(all_day),
+    }
+}
+
 export default class System extends Component {
 
     state = {
+        // data: R.filter(
+        //     v => v.code === 'JD',
+        // )(this.props.context.state.breed),
         data: this.props.context.state.breed,
     }
-
 
     componentDidMount() {
         // AsyncStorage.getItem('data', (e, rv) => {
@@ -50,9 +64,9 @@ export default class System extends Component {
 
         this.fetch_current_data()
 
-        setInterval(() => {
-            this.fetch_current_data()
-        }, 60 * 1000)
+        // setInterval(() => {
+        //     this.fetch_current_data()
+        // }, 60 * 2000)
     }
 
     // 请求当前数据
@@ -102,6 +116,7 @@ export default class System extends Component {
                     data: ft_log,
                 })
                 console.log('flow', '完成当前数据的请求', ft_log)
+                this.handle_reload_log()
             } else {
                 Toast.fail('请求接口数据异常！')
             }
@@ -305,6 +320,8 @@ export default class System extends Component {
                     // 一周盈利率
                     const before_a_week_real_rate = (Math.abs(price - before_a_week_price) / before_a_week_price * item.real_rate * 100).toFixed(1)
 
+                    const ensemble = analy_ensemble(all_day)
+
                     ft_log = [
                         ...ft_log,
                         {
@@ -324,6 +341,7 @@ export default class System extends Component {
                                 before_a_week_rate,
                                 before_a_week_real_rate,
 
+                                ensemble,
                             },
                         }
                     ]
@@ -357,9 +375,7 @@ export default class System extends Component {
 
     render() {
 
-        const breed = this.props.context.state.breed
-
-        // AsyncStorage.clear()
+        const data = this.state.data
 
         return (
             <Card full style={{borderColor: 'white'}}>
@@ -374,46 +390,79 @@ export default class System extends Component {
                     }
                     thumb={<Icon name='safety' size='md' color='black'/>}/>
                 <Card.Body>
-                    <List renderHeader={`备选品种(${breed.length})`}>
+                    <List renderHeader={`备选品种(${data.length})`}>
                         <List.Item wrap={true}>
                             <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 6}}>
                                 {
                                     R.addIndex(R.map)(
                                         (v, k) => <Tag key={k} small selected style={{margin: 4}}>{v.name}</Tag>
-                                    )(breed)
+                                    )(data)
                                 }
                             </View>
                         </List.Item>
                     </List>
                     <List renderHeader={'接口数据'} style={{overflw: 'scroll'}}>
+                        <List.Item wrap={true}>
+                            <View style={{flexDirection: 'row', flowWrap: 'wrap', fontSize: 10}}>
+                                <Text style={{width: 50}}>品种</Text>
+                                {/* 当前价  */}
+                                <Text style={{width: 50, textAlign: 'right'}}>当前价</Text>
+                                {/* 一周前价格 */}
+                                <Text style={{width: 90, textAlign: 'right'}}>周前价</Text>
+                                {/* 一周盈利率 */}
+                                <Text style={{width: 60, textAlign: 'right'}}>周盈率</Text>
+                                {/* 价格状态  */}
+                                <Text style={{width: 50, textAlign: 'right'}}>状态</Text>
+                                {/* 极端波幅  */}
+                                <Text style={{width: 40, textAlign: 'right'}}>波幅</Text>
+                            </View>
+                        </List.Item>
                         {
                             R.compose(
                                 R.addIndex(R.map)(
                                     (v, k)  => (
                                         <List.Item key={k} wrap={true}>
-                                            <View style={{flexDirection: 'row', flowWrap: 'wrap', fontSize: 10}}>
-                                                <Text style={{width: 50}}>{v.name}{R.takeLast(2)(v.month)}</Text>
-                                                {/* 当前价  */}
-                                                <Text style={{width: 50, textAlign: 'right'}}>{v.info ? v.price : '-'}</Text>
-                                                {/* 一周前价格 */}
-                                                <Text style={{width: 90, textAlign: 'right'}}>{v.month_data ? `${v.month_data.before_a_week_price}(${v.month_data.before_a_week_rate})` : '-'}</Text>
-                                                {/* 一周盈利率 */}
-                                                <Text style={{width: 40, textAlign: 'right'}}>{v.month_data ? `${v.month_data.before_a_week_real_rate}` : '-'}</Text>
-                                                {/* 价格状态  */}
-                                                <Text style={{width: 50, textAlign: 'right'}}>{v.price_state_cn ? `${v.price_state_cn}${v.price_state}` : '-'}</Text>
-                                                {/* 极端波幅  */}
-                                                <Text style={{width: 40, textAlign: 'right'}}>{v.max_to_min_rate ? `${v.max_to_min_rate}` : '-'}</Text>
-                                            </View>
-                                            <View style={{flexDirection: 'row', flowWrap: 'wrap', fontSize: 8,}}>
-                                                {/* 持仓资金  */}
-                                                <Text style={{width: 40, textAlign: 'right', color: '#999'}}>{Math.round(v.current_hold_amount_totle / 100000000) + '亿'}</Text>
-                                                {/* 保证金比例  */}
-                                                <Text style={{width: 20, textAlign: 'right', color: '#999'}}>{v.real_rate ? v.real_rate : '-'}</Text>
-                                                {/* 一手保证金  */}
-                                                <Text style={{width: 50, textAlign: 'right', color: '#999'}}>{v.current_bond ? v.current_bond : '-'}</Text>
-                                                <Text style={{width: 90, textAlign: 'right', color: '#999'}}>{v.price_max ? `${v.price_max}-${v.spread_max_rate}` : '-'}</Text>
-                                                <Text style={{width: 90, textAlign: 'right', color: '#999'}}>{v.price_min ? `${v.price_min}-${v.spread_min_rate}` : '-'}</Text>
-                                            </View>
+                                            {v.month_data ? (
+                                                <View>
+                                                    <View style={{marginBottom: 5, flexDirection: 'row', flowWrap: 'wrap', fontSize: 10}}>
+                                                        <Text style={{width: 50}}>{v.name}{R.takeLast(2)(v.month)}</Text>
+                                                        {/* 当前价  */}
+                                                        <Text style={{width: 50, textAlign: 'right'}}>{v.price}</Text>
+                                                        {/* 一周前价格 */}
+                                                        <Text style={{width: 90, textAlign: 'right'}}>{`${v.month_data.before_a_week_price}(${v.month_data.before_a_week_rate})`}</Text>
+                                                        {/* 一周盈利率 */}
+                                                        <Text style={{width: 60, textAlign: 'right'}}>{v.month_data.before_a_week_real_rate}</Text>
+                                                        {/* 价格状态  */}
+                                                        <Text style={{width: 50, textAlign: 'right'}}>{`${v.price_state_cn}${v.price_state}`}</Text>
+                                                        {/* 极端波幅  */}
+                                                        <Text style={{width: 40, textAlign: 'right'}}>{v.max_to_min_rate}</Text>
+                                                    </View>
+
+                                                    <View style={{marginBottom: 5}}>
+                                                        <Text style={{color: '#aaa'}}>
+                                                            保证金: {v.current_bond} 杠杆: {v.real_rate} 持仓资金: {Math.round(v.current_hold_amount_totle / 100000000) + '亿'}
+                                                        </Text>
+                                                    </View>
+                                                    <View style={{marginBottom: 5}}>
+                                                        <Text style={{color: '#aaa'}}>
+                                                            最高价: {`${v.price_max}（${v.spread_max_rate}）`} 最低价: {`${v.price_min}（${v.spread_min_rate}）`}
+                                                        </Text>
+                                                    </View>
+
+                                                    <View style={{marginBottom: 5, flexDirection: 'row',}}>
+                                                        <Text style={{color: '#aaa'}}>倒三角趋势:</Text>
+                                                        {
+                                                            R.addIndex(R.map)(
+                                                                (v, k) => <Text style={{color: v.trend ? '#FF6A6A' : '#448847', width: 55}}>{v.name}{v.time_rang_rate} </Text>
+                                                            )(v.month_data.ensemble.analy_120_80_40_20_10)
+                                                        }
+                                                    </View>
+
+                                                    <View style={{marginBottom: 5}}>
+                                                        {flow.test_trade_auto_flow(v)}
+                                                    </View>
+                                                </View>
+                                            ) : null}
                                         </List.Item>
                                     )
                                 ),
@@ -442,6 +491,14 @@ export default class System extends Component {
         )
     }
 }
+
+// lianxu jiekou
+// [0] date
+// [1] kaipan
+// [2] zuigao
+// [3] zuidi
+// [4] shoupan
+// [5] chengjiaoliang
 
 // console.log(
 //     CLEAR_CODE,

@@ -39,4 +39,8 @@ export default [
         content: 'RC系统的一个目的就是为了体系化，理论化风控领域',
         type: ['系统'],
     },
+    {
+        content: '盈利前提条件：价格存在趋势',
+        type: ['趋势'],
+    },
 ]
