@@ -8,7 +8,7 @@ import {
   ScrollView,
   TabBarIOS,
   TouchableOpacity,
-  AsyncStorage,
+  // AsyncStorage,
 } from 'react-native'
 
 import {
@@ -18,6 +18,7 @@ import {
     Grid,
     Steps,
     List,
+    ListView,
     Tag,
     Modal,
     Button,
@@ -33,6 +34,8 @@ import {
     test_trade_auto_flow,
 }from './flow'
 
+import rule_var_list from './data/规则var.js'
+
 const analy_ensemble = all_day => {
     return {
         analy_120_80_40_20_10: analy_120_to_10(all_day),
@@ -41,11 +44,19 @@ const analy_ensemble = all_day => {
 
 export default class System extends Component {
 
+    analylog = []
+
     state = {
         // data: R.filter(
-        //     v => v.code === 'RU',
+        //     v => v.code === 'JD',
         // )(this.props.context.state.breed),
         data: this.props.context.state.breed,
+
+        real_trade: this.props.context.state.real_trade,
+
+        modal_log: {
+            visible: false,
+        },
     }
 
     componentDidMount() {
@@ -67,6 +78,51 @@ export default class System extends Component {
         // setInterval(() => {
         //     this.fetch_current_data()
         // }, 60 * 2000)
+    }
+
+    display_real_trade() {
+        const rule_var = rule_var_list[0]
+
+        this.setState({
+            real_trade: R.compose(
+                R.map(
+                    v => {
+                        if(v.status === '持仓') {
+                            // 获取当前品种信息
+                            const info = R.compose(
+                                v => v[0],
+                                R.filter(
+                                    item => item.code === v.code
+                                )
+                            )(this.state.data)
+
+                            if(info) {
+                                const loss_price = v.direction === '买入' ? v.open_price - parseInt(v.open_price * rule_var.loss_rate) : parseInt(v.open_price + v.open_price * rule_var.loss_rate)
+                                const add_price = v.direction === '买入' ? parseInt(v.open_price + v.open_price * rule_var.add_rate) : v.open_price - parseInt(v.open_price * rule_var.add_rate)
+
+                                return {
+                                    ...v,
+                                    current_price: info.price,
+                                    // 当前盈利
+                                    current_profit: v.direction === '买入' ? (info.price - v.open_price) * info.unit * v.count : (v.open_price - info.price) * info.unit * v.count,
+                                    // 止损价
+                                    loss_price,
+                                    loss_price_gap: v.direction === '买入' ? loss_price - info.price : info.price - loss_price,
+                                    // 加仓价
+                                    add_price,
+                                    add_price_gap: v.direction === '买入' ? info.price - add_price : add_price - info.price,
+                                }
+                            } else {
+                                return v
+                            }
+
+                        } else {
+                            return v
+                        }
+                    }
+                )
+            )(this.state.real_trade),
+        })
     }
 
     // 请求当前数据
@@ -116,6 +172,12 @@ export default class System extends Component {
                     data: ft_log,
                 })
                 console.log('flow', '完成当前数据的请求', ft_log)
+
+                this.analylog.push({
+                    lv: 'info',
+                    msg: '获取当前品种信息成功',
+                })
+
                 this.handle_reload_log()
             } else {
                 Toast.fail('请求接口数据异常！')
@@ -263,6 +325,8 @@ export default class System extends Component {
 
                 if (request.status === 200) {
                     const all_day = R.compose(
+                        // 更新最后一天的收盘价为当前价
+
                         R.map(
                             R.addIndex(R.map)(
                                 (v, k) => k === 0 ? v : parseInt(v)
@@ -340,7 +404,7 @@ export default class System extends Component {
                         ensemble,
                     }
 
-                    const trade = test_trade_auto_flow({...item, month_data})
+                    const trade = test_trade_auto_flow({...item, month_data}, log => this.analylog.push(log))
 
                     ft_log = [
                         ...ft_log,
@@ -366,6 +430,7 @@ export default class System extends Component {
 
                         console.log('flow', '完成指定月合约日志数据的请求', ft_log)
                         // this.fetch_current_data()
+                        this.display_real_trade()
                     }
 
                 } else {
@@ -378,6 +443,24 @@ export default class System extends Component {
         }
     }
 
+    handle_modal_log_open() {
+        this.setState({
+            modal_log: {
+                ...this.state.modal_log,
+                visible: true,
+            },
+        })
+    }
+
+    handle_modal_log_close() {
+        this.setState({
+            modal_log: {
+                ...this.state.modal_log,
+                visible: false,
+            },
+        })
+    }
+
     render() {
 
         const data = this.state.data
@@ -388,7 +471,7 @@ export default class System extends Component {
                     title='交易系统'
                     extra={
                         <View style={{flexDirection: 'row-reverse'}}>
-                            <TouchableOpacity style={{padding: 4}} onPress={() => this.handle_reload_log()}>
+                            <TouchableOpacity style={{padding: 4}} onPress={() => this.fetch_current_data()}>
                                 <Icon name='reload' size='md' color='#BBB'/>
                             </TouchableOpacity>
                         </View>
@@ -396,10 +479,85 @@ export default class System extends Component {
                     thumb={<Icon name='safety' size='md' color='black'/>}/>
                 <Card.Body>
                     <List renderHeader={'真实交易'}>
-                        <List.Item wrap={true}>
-                            
-                        </List.Item>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => (
+                                        <List.Item key={k} wrap={true}>
+                                            {
+                                                v.status === '持仓'
+                                                    ? (
+                                                        <View>
+                                                            <Text>
+                                                                {v.code} {R.takeLast(5)(v.date)} {v.open_price} {v.direction} {v.count} {v.current_profit} {v.current_price}
+                                                            </Text>
+                                                            <Text style={{color: '#999'}}>
+                                                                止损:{v.loss_price}({v.loss_price_gap})  加仓:{v.add_price}({v.add_price_gap})
+                                                            </Text>
+                                                        </View>
+                                                    )
+                                                    : (
+                                                        <View>
+                                                            <Text>
+                                                                {v.code} {R.takeLast(5)(v.date)} {v.open_price} {v.direction} {v.count} {v.close_price} {v.profit}
+                                                            </Text>
+                                                        </View>
+                                                    )
+                                            }
+                                        </List.Item>
+                                    )
+                                )(this.state.real_trade)
+                            }
                     </List>
+
+                    <List renderHeader={'交易提示汇总'}>
+                        {
+                            this.state.data && this.state.data[0].trade_list
+                                ? (
+                                    R.compose(
+                                        R.addIndex(R.map)(
+                                            (v, k) => v ? (
+                                                <List.Item wrap={true}>
+                                                    <View  key={k} style={{flexDirection: 'row', flexWrap: 'wrap',}}>
+                                                        <Text style={{width: 50}}>
+                                                            {R.takeLast(5)(v.status === '平仓' ? v.close_date : v.date)}
+                                                        </Text>
+                                                        <Text style={{width: 60}}>
+                                                            {v.name}{v.code}
+                                                        </Text>
+                                                        <Text style={{width: 40}}>
+                                                            {v.direction}
+                                                        </Text>
+                                                        <Text style={{width: 50}}>
+                                                            {v.open_price}
+                                                        </Text>
+                                                        <Text style={{width: 50}}>
+                                                            {v.close_price || '-'}
+                                                        </Text>
+                                                        <Text style={{width: 40}}>
+                                                            {v.status}
+                                                        </Text>
+                                                        <Text style={{width: 20}}>
+                                                            {v.rb_update_count}
+                                                        </Text>
+                                                        <Text style={{width: 30}}>
+                                                            {v.count}
+                                                        </Text>
+                                                    </View>
+                                                </List.Item>
+                                            ) : null
+                                        ),
+                                        R.sort(
+                                            (a, b) => a.date < b.date ? 1 : -1
+                                        ),
+                                        R.map(
+                                            v => v.trade_list[v.trade_list.length - 1]
+                                        )
+                                    )(this.state.data)
+                                )
+                                : null
+                        }
+                    </List>
+
                     <List renderHeader={`备选品种(${data.length})`}>
                         <List.Item wrap={true}>
                             <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 6}}>
@@ -413,6 +571,13 @@ export default class System extends Component {
                     </List>
                     <List renderHeader={`接口数据(${R.reduce((a, b) => a + b.total_profit, 0)(this.state.data)})`} style={{overflw: 'scroll'}}>
                         <List.Item wrap={true}>
+                            <View>
+                                <View style={{flexDirection: 'row-reverse', marginBottom: 10,}}>
+                                    <TouchableOpacity style={{padding: 4}} onPress={() => this.handle_modal_log_open()}>
+                                        <Icon name='monitor' size='md' color='#BBB'/>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                             <View style={{flexDirection: 'row', flowWrap: 'wrap', fontSize: 10}}>
                                 <Text style={{width: 50}}>品种</Text>
                                 {/* 当前价  */}
@@ -471,13 +636,7 @@ export default class System extends Component {
                                                     <View style={{marginBottom: 5}}>
                                                         <View>
                                                             <View>
-                                                                <Text style={{color: '#aaa'}}>测试自动交易流程:</Text>
-                                                                {
-                                                                    // R.addIndex(R.map)(
-                                                                    //     (v, k) => <Text key={k}>{k + 1} {v.time} {v.direction} {v.start_price} {v.price_state} {v.bond} {v.count} {v.result} {v.current_profit}</Text>
-                                                                    // )(trade_list)
-                                                                }
-
+                                                                <Text style={{color: '#aaa'}}>自动测算分析:</Text>
                                                                 {
                                                                     R.compose(
                                                                         R.addIndex(R.map)(
@@ -489,15 +648,41 @@ export default class System extends Component {
                                                             </View>
 
                                                             <View>
-                                                                <Text style={{color: '#aaa'}}>交易单: ({v.total_profit})</Text>
+                                                                <Text style={{color: v.total_profit > 0 ? '#FF6A6A' : '#448847'}}>自动交易: ({v.total_profit})</Text>
 
                                                                 {
                                                                     R.compose(
                                                                         R.addIndex(R.map)(
                                                                             (v, k) => (
-                                                                                <Text key={k} style={{color: '#aaa'}}>
-                                                                                    {v.direction} {v.open_price} {v.count} {R.takeLast(5)(v.date)} {v.current_profit}({v.current_profit_rate}) {v.close_price} {v.status} {v.rb_update_count}
-                                                                                </Text>
+                                                                                <View  key={k} style={{flexDirection: 'row', flexWrap: 'wrap',}}>
+                                                                                    <Text style={{color: '#aaa', width: 30}}>
+                                                                                        {v.direction}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                        {v.open_price}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 20}}>
+                                                                                        {v.count}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                        {v.close_price || '-'}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                        {R.takeLast(5)(v.date)}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                        {R.takeLast(5)(v.close_date || '-')}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 34}}>
+                                                                                        {v.status}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 14}}>
+                                                                                        {v.rb_update_count}
+                                                                                    </Text>
+                                                                                    <Text style={{color: '#aaa', width: 50}}>
+                                                                                        {v.current_profit}
+                                                                                    </Text>
+                                                                                </View>
                                                                             )
                                                                         ),
                                                                     )(v.trade_list)
@@ -510,8 +695,18 @@ export default class System extends Component {
                                         </List.Item>
                                     )
                                 ),
+                                // R.filter(
+                                //     v => v.trade_list && v.trade_list[v.trade_list.length - 1].status === '持仓'
+                                // ),
                                 R.sort(
                                     (a ,b) => {
+                                        // if(a.trade_list) {
+                                        //     console.log('a.trade_list', a.trade_list)
+                                        //     return a.trade_list[a.trade_list.length - 1].status === '持仓'
+                                        // } else {
+                                        //     return false
+                                        // }
+
                                         // 依据测试交易盈利额排序
                                         if(a.total_profit) {
                                             return b.total_profit - a.total_profit
@@ -538,6 +733,32 @@ export default class System extends Component {
                         }
                     </List>
                 </Card.Body>
+
+                <Modal
+                    visible={this.state.modal_log.visible}
+                    animationType='slide-up'
+                    // transparent={true}
+                    // footer={[
+                    //     {text: '取消', onPress: () => this.handle_modal_edit_close()},
+                    //     {text: '保存', onPress: () => this.handle_modal_edit_save()},
+                    // ]}
+                    onClose={() => this.handle_modal_log_close()}>
+
+                    <View style={{flexDirection: 'column', marginTop: 20, height: 600}}>
+                        <ListView
+                            onFetch={(page, startFetch) => startFetch(this.analylog, 10)}
+                            refreshableMode='advanced'
+                            renderItem={(item, index, separator) => (
+                                this.analylog.length > index
+                                    ? (
+                                        <View style={{padding: 5,}}>
+                                            <Text>{index + 1}. {item.msg}</Text>
+                                        </View>
+                                    )
+                                    : null
+                            )}/>
+                    </View>
+                </Modal>
             </Card>
         )
     }

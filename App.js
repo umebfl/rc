@@ -39,6 +39,7 @@ import _rule from './data/规则'
 import _capital from './data/资金分配'
 import _base_info from './data/基础信息'
 import _breed from './data/品种'
+import _real_trade from './data/真实交易'
 
 export default class App extends Component {
 
@@ -54,6 +55,7 @@ export default class App extends Component {
         capital: _capital,
         base_info: _base_info,
         breed: _breed,
+        real_trade: _real_trade,
 
         modal_edit: {
             visible: false,

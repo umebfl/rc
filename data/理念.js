@@ -47,4 +47,8 @@ export default [
         content: '饿死胆小的, 撑死胆大的. 胆大心细',
         type: ['灵感'],
     },
+    {
+        content: '用大额的盈利, 来填补试探的亏损',
+        type: ['灵感'],
+    },
 ]

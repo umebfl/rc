@@ -137,7 +137,7 @@ const analy_trade = (week_data_list) => {
 //     //     end_price: 2100,
 //     //     direction: 'buy',
 //     //     result: 1000,
-//     //     status: 0,    // 0: 已结束交易 1: 正在交易中
+//     //     status: 0,    // 0: 已结束交易 1: 正在持仓
 //     // }
 //     let trade_list = []
 //
@@ -165,7 +165,7 @@ const analy_trade = (week_data_list) => {
 //
 //                 const last_trade = trade_list[trade_list.length - 1]
 //
-//                 // 是否在交易中
+//                 // 是否在持仓
 //                 if(last_trade && last_trade.status === 1) {
 //
 //                     // 是否达到加仓条件，如果符合则加仓，否则不管
@@ -235,10 +235,39 @@ const analy_trade = (week_data_list) => {
 //     return trade_list
 // }
 
-const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) => {
+const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload, setlog) => {
+
+    // setlog({
+    //     lv: 'info',
+    //     msg: `执行自动交易流程 | ${payload.code} 数据源长度:${data.length}`,
+    // })
+
+    // 数据源过少时 不执行分析和操作
+    // if(data.length < 20) {
+    //
+    //     setlog({
+    //         lv: 'info',
+    //         msg: `数据源过少, 结束交易流程`,
+    //     })
+    //
+    //     return
+    // }
+
 
     // 价格分析
     const current_data = data[data.length - 1]
+
+//     setlog({
+//         lv: 'info',
+//         msg: `交易数据:
+// 日期:${current_data[0]}
+// 开盘价:${current_data[1]}
+// 最高价:${current_data[2]}
+// 最低价:${current_data[3]}
+// 收盘价:${current_data[4]}
+// 成交量:${current_data[5]}
+// 波动: ${((current_data[1] - current_data[4]) / current_data[4] * 100).toFixed(2)}%`,
+// })
 
     // 主力连续 当前价格
     const current_price = current_data[4]
@@ -298,7 +327,22 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
         analy_120_to_10_data,
     }
 
-    let direction = null
+//     setlog({
+//         lv: 'info',
+//         msg: `数据分析:
+// 当前价:${current_price}
+// 最高价:${price_max}
+// 最高价差比:${spread_max_rate}
+// 最低价:${price_min}
+// 最低价差比:${spread_min_rate}
+// 价格状态值:${price_state}
+// 价格状态:${price_state_cn}
+// 当日波动:${current_rang}
+// 当日波动比:${current_rang_rate}
+// 价格趋势分析:${analy_120_to_10_data[0].name}`,
+// })
+
+    let direction = '未知'
     let build_trade = null
 
     // 执行交易
@@ -337,7 +381,7 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
         }
     }
 
-    analy_day_list.push({
+    const analy_day = {
         // data,
         date: R.takeLast(5)(current_data[0]),
         analy_price,
@@ -347,12 +391,19 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
         current_rang_rate,
         direction,
         build_trade,
+    }
+
+    analy_day_list.push(analy_day)
+
+    setlog({
+        lv: 'info',
+        msg: `分析${payload.code} ${analy_day.date} ${analy_day.current_price} ${analy_day.price_state_cn} 方向:${analy_day.direction} 建议:${analy_day.build_trade ? '开仓' : '不操作'}`,
     })
 
 
     const last_trade = trade_list[trade_list.length - 1]
 
-    if(last_trade && last_trade.status === '交易中') {
+    if(last_trade && last_trade.status === '持仓') {
 
 
         let current_profit = last_trade.before_add_profit
@@ -367,10 +418,24 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
         last_trade.current_profit = parseInt(current_profit)
         last_trade.current_profit_rate = (current_profit / (last_trade.count * payload.current_bond) * 100).toFixed(2)
 
-        // 平仓 - 止损 || 止盈
-        if(last_trade.direction === '买入' && current_price < last_trade.loss_price || last_trade.direction === '卖出' && current_price > last_trade.loss_price) {
+        setlog({
+            lv: 'info',
+            msg: `方向:${last_trade.direction} 当前盈利:${last_trade.current_profit}`
+        })
+
+        // 平仓 - 止损 || 止盈 || 建议方向与持仓方向不相同
+        if(last_trade.direction === '买入' && current_price < last_trade.loss_price ||
+            last_trade.direction === '卖出' && current_price > last_trade.loss_price ||
+            last_trade.direction !== direction) {
             last_trade.close_price = last_trade.loss_price
             last_trade.status = '平仓'
+            last_trade.close_date = current_data[0]
+
+            setlog({
+                lv: 'info',
+                msg: `操作 | 平仓 \n平仓价:${last_trade.close_price}`
+            })
+
         } else {
 
             // 第一次盈利回撤 或者 达到加仓次数上限
@@ -379,9 +444,14 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
                 if(last_trade.direction === '买入' && current_price > last_trade.rb_price || last_trade.direction === '卖出' && current_price < last_trade.rb_price) {
                     // 设置回撤止盈价
                     last_trade.loss_price = last_trade.rb_price
-                    // 更新回撤 标的价格
+                    // 更新回撤标的价格
                     last_trade.rb_price = direction === '买入' ? parseInt(current_price + current_price * rule_var.loss_rate) : current_price - parseInt(current_price * rule_var.loss_rate)
                     last_trade.rb_update_count++
+
+                    setlog({
+                        lv: 'info',
+                        msg: `操作 | 盈利 更新回撤 \n更新平仓价:${last_trade.loss_price} \n更新止盈价${last_trade.rb_price} \n更新止盈价次数${last_trade.rb_update_count}`
+                    })
                 }
             } else {
                 // 加仓
@@ -404,21 +474,26 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
                     last_trade.add_count++
                     last_trade.rb_update_count++
 
-                    console.log(
-                        '加仓 |',
-                        last_trade.direction,
-                        '当前一手保证金:', payload.current_bond,
-                        '首开仓价:', last_trade.open_price_first,
-                        '加仓前盈利:', last_trade.before_add_profit,
+                    // console.log(
+                    //     '加仓 |',
+                    //     last_trade.direction,
+                    //     '当前一手保证金:', payload.current_bond,
+                    //     '首开仓价:', last_trade.open_price_first,
+                    //     '加仓前盈利:', last_trade.before_add_profit,
+                    //
+                    //     '开仓价:', last_trade.open_price,
+                    //     '加仓价:', last_trade.add_price,
+                    //     '止损价:', last_trade.loss_price,
+                    //     '保证金:', last_trade.bond,
+                    //     '手数:', last_trade.count,
+                    //     '加仓次数:', last_trade.add_count,
+                    //     '回撤更新次数:', last_trade.rb_update_count,
+                    // )
 
-                        '开仓价:', last_trade.open_price,
-                        '加仓价:', last_trade.add_price,
-                        '止损价:', last_trade.loss_price,
-                        '保证金:', last_trade.bond,
-                        '手数:', last_trade.count,
-                        '加仓次数:', last_trade.add_count,
-                        '回撤更新次数:', last_trade.rb_update_count,
-                    )
+                    setlog({
+                        lv: 'info',
+                        msg: `操作 | 加仓 | ${last_trade.code} ${last_trade.direction}\n加仓后|\n开仓价:${last_trade.open_price}\n加仓价:${last_trade.add_price}\n止损价:${last_trade.loss_price}\n保证金:${last_trade.bond}\n手数:${last_trade.count}\n加仓次数:${last_trade.add_count}\n止盈更新次数:${last_trade.rb_update_count}`,
+                    })
                 }
             }
 
@@ -430,6 +505,7 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
 
             // 创建交易单
             const trade = {
+                name: payload.name,
                 // 方向
                 direction,
                 // 价格
@@ -463,36 +539,51 @@ const trade_auto_flow = (data, analy_day_list, trade_list, rule_var, payload) =>
                 before_add_profit: 0,
                 // 平仓价
                 close_price: null,
+                // 平仓时间
+                close_date: null,
                 // 状态
-                status: '交易中',
+                status: '持仓',
             }
 
             trade_list.push(trade)
+
+            setlog({
+                lv: 'info',
+                msg: `操作 | 开仓 |
+${trade.code} ${trade.direction}
+开仓价:${trade.open_price}
+加仓价:${trade.add_price}
+止损价:${trade.loss_price}
+止盈价:${trade.rb_price}
+保证金:${trade.bond}
+手数:${trade.count}`,
+})
+
         }
     }
 
-    console.log(
-        data[data.length -1][0],
-        current_price,
-        price_state_cn,
-        price_state,
-        analy_120_to_10_data[0].trend,
-        analy_120_to_10_data[1].trend,
-        analy_120_to_10_data[2].trend,
-        analy_120_to_10_data[3].trend,
-        analy_120_to_10_data[4].trend,
-        current_rang_rate,
-        direction,
-        build_trade,
-        trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].loss_price : null,
-        trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].status : null,
-        trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].current_profit : null,
-        trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].count : null,
-    )
+    // console.log(
+    //     data[data.length -1][0],
+    //     current_price,
+    //     price_state_cn,
+    //     price_state,
+    //     analy_120_to_10_data[0].trend,
+    //     analy_120_to_10_data[1].trend,
+    //     analy_120_to_10_data[2].trend,
+    //     analy_120_to_10_data[3].trend,
+    //     analy_120_to_10_data[4].trend,
+    //     current_rang_rate,
+    //     direction,
+    //     build_trade,
+    //     trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].loss_price : null,
+    //     trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].status : null,
+    //     trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].current_profit : null,
+    //     trade_list[trade_list.length - 1] ? trade_list[trade_list.length - 1].count : null,
+    // )
 
 }
 
-export const test_trade_auto_flow = payload => {
+export const test_trade_auto_flow = (payload, setlog) => {
 
     // const all_day = payload.month_data.all_day
     // const rate = payload.rate
@@ -549,10 +640,10 @@ export const test_trade_auto_flow = payload => {
         (v, k) => trade_auto_flow([
             ...init_data_list,
             ...R.take(k + 1)(test_data_list),
-        ], analy_day_list, trade_list, rule_var, payload)
+        ], analy_day_list, trade_list, rule_var, payload, setlog)
     )(test_data_list)
 
-    console.log('trade_list', trade_list)
+    // console.log('trade_list', trade_list)
     // console.log('analy_day_list', analy_day_list)
 
     // 统计盈利率
