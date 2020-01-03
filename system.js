@@ -75,9 +75,13 @@ export default class System extends Component {
 
         this.fetch_current_data()
 
-        // setInterval(() => {
-        //     this.fetch_current_data()
-        // }, 60 * 2000)
+        this.state.timer = setInterval(() => {
+            this.fetch_current_data()
+        }, 60 * 1000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.timer)
     }
 
     display_real_trade() {
@@ -326,7 +330,12 @@ export default class System extends Component {
                 if (request.status === 200) {
                     const all_day = R.compose(
                         // 更新最后一天的收盘价为当前价
+                        v => {
 
+                            v[v.length - 1][4] = parseInt(item.price)
+
+                            return v
+                        },
                         R.map(
                             R.addIndex(R.map)(
                                 (v, k) => k === 0 ? v : parseInt(v)
@@ -465,6 +474,19 @@ export default class System extends Component {
 
         const data = this.state.data
 
+        let op_list = []
+
+        if(this.state.data && this.state.data[0].trade_list) {
+            op_list = R.compose(
+                R.sort(
+                    (a, b) => a.date < b.date ? 1 : -1
+                ),
+                R.map(
+                    v => v.trade_list[v.trade_list.length - 1]
+                )
+            )(this.state.data)
+        }
+
         return (
             <Card full style={{borderColor: 'white'}}>
                 <Card.Header
@@ -509,52 +531,43 @@ export default class System extends Component {
                             }
                     </List>
 
-                    <List renderHeader={'交易提示汇总'}>
+                    <List renderHeader={`交易提示汇总(${R.reduce((a, b) => a + b.current_profit, 0)(op_list)})`}>
                         {
-                            this.state.data && this.state.data[0].trade_list
-                                ? (
-                                    R.compose(
-                                        R.addIndex(R.map)(
-                                            (v, k) => v ? (
-                                                <List.Item wrap={true}>
-                                                    <View  key={k} style={{flexDirection: 'row', flexWrap: 'wrap',}}>
-                                                        <Text style={{width: 50}}>
-                                                            {R.takeLast(5)(v.status === '平仓' ? v.close_date : v.date)}
-                                                        </Text>
-                                                        <Text style={{width: 60}}>
-                                                            {v.name}{v.code}
-                                                        </Text>
-                                                        <Text style={{width: 40}}>
-                                                            {v.direction}
-                                                        </Text>
-                                                        <Text style={{width: 50}}>
-                                                            {v.open_price}
-                                                        </Text>
-                                                        <Text style={{width: 50}}>
-                                                            {v.close_price || '-'}
-                                                        </Text>
-                                                        <Text style={{width: 40}}>
-                                                            {v.status}
-                                                        </Text>
-                                                        <Text style={{width: 20}}>
-                                                            {v.rb_update_count}
-                                                        </Text>
-                                                        <Text style={{width: 30}}>
-                                                            {v.count}
-                                                        </Text>
-                                                    </View>
-                                                </List.Item>
-                                            ) : null
-                                        ),
-                                        R.sort(
-                                            (a, b) => a.date < b.date ? 1 : -1
-                                        ),
-                                        R.map(
-                                            v => v.trade_list[v.trade_list.length - 1]
-                                        )
-                                    )(this.state.data)
+                            R.addIndex(R.map)(
+                                (v, k) => (
+                                    <List.Item wrap={true}>
+                                        <View  key={k} style={{flexDirection: 'row', flexWrap: 'wrap',}}>
+                                            <Text style={{width: 50, fontSize: 12,}}>
+                                                {R.takeLast(5)(v.status === '平仓' ? v.close_date : v.date)}
+                                            </Text>
+                                            <Text style={{width: 30, fontSize: 12,}}>
+                                                {v.name}
+                                            </Text>
+                                            <Text style={{width: 40, fontSize: 12,}}>
+                                                {v.direction}
+                                            </Text>
+                                            <Text style={{width: 50, fontSize: 12,}}>
+                                                {v.open_price}
+                                            </Text>
+                                            <Text style={{width: 50, fontSize: 12,}}>
+                                                {v.close_price || '-'}
+                                            </Text>
+                                            <Text style={{width: 30, fontSize: 12,}}>
+                                                {v.status}
+                                            </Text>
+                                            <Text style={{width: 20, fontSize: 12,}}>
+                                                {v.rb_update_count}
+                                            </Text>
+                                            <Text style={{width: 20, fontSize: 12,}}>
+                                                {v.count}
+                                            </Text>
+                                            <Text style={{width: 50, fontSize: 12,}}>
+                                                {v.current_profit}
+                                            </Text>
+                                        </View>
+                                    </List.Item>
                                 )
-                                : null
+                            )(op_list)
                         }
                     </List>
 
@@ -580,15 +593,10 @@ export default class System extends Component {
                             </View>
                             <View style={{flexDirection: 'row', flowWrap: 'wrap', fontSize: 10}}>
                                 <Text style={{width: 50}}>品种</Text>
-                                {/* 当前价  */}
                                 <Text style={{width: 50, textAlign: 'right'}}>当前价</Text>
-                                {/* 一周前价格 */}
                                 <Text style={{width: 90, textAlign: 'right'}}>周前价</Text>
-                                {/* 一周盈利率 */}
                                 <Text style={{width: 60, textAlign: 'right'}}>周盈率</Text>
-                                {/* 价格状态  */}
                                 <Text style={{width: 50, textAlign: 'right'}}>状态</Text>
-                                {/* 极端波幅  */}
                                 <Text style={{width: 40, textAlign: 'right'}}>波幅</Text>
                             </View>
                         </List.Item>
