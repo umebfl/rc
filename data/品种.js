@@ -78,12 +78,19 @@ export default [
         month: '2005',
     },
     {
-        code: 'L',
-        name: '塑料',
-        rate: 0.09,
-        unit: 5,
+        code: 'RB',
+        name: '螺纹',
+        rate: 0.14,
+        unit: 10,
         month: '2005',
     },
+    // {
+    //     code: 'L',
+    //     name: '塑料',
+    //     rate: 0.09,
+    //     unit: 5,
+    //     month: '2005',
+    // },
     // {
     //     code: 'AL',
     //     name: '沪铝',
@@ -118,13 +125,6 @@ export default [
     //     rate: 0.12,
     //     unit: 1000,
     //     month: '2006',
-    // },
-    // {
-    //     code: 'RB',
-    //     name: '螺纹',
-    //     rate: 0.14,
-    //     unit: 10,
-    //     month: '2005',
     // },
     // {
     //     code: 'HC',

@@ -43,4 +43,8 @@ export default [
         content: '盈利前提条件：价格存在趋势',
         type: ['趋势'],
     },
+    {
+        content: '饿死胆小的, 撑死胆大的. 胆大心细',
+        type: ['灵感'],
+    },
 ]

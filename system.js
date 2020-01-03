@@ -30,7 +30,7 @@ import {
 import {
     analy_price,
     analy_120_to_10,
-    flow,
+    test_trade_auto_flow,
 }from './flow'
 
 const analy_ensemble = all_day => {
@@ -43,7 +43,7 @@ export default class System extends Component {
 
     state = {
         // data: R.filter(
-        //     v => v.code === 'JD',
+        //     v => v.code === 'RU',
         // )(this.props.context.state.breed),
         data: this.props.context.state.breed,
     }
@@ -322,27 +322,32 @@ export default class System extends Component {
 
                     const ensemble = analy_ensemble(all_day)
 
+                    const month_data = {
+                        all_day,
+                        price_max,
+                        spread_max_rate,
+                        price_min,
+                        spread_min_rate,
+                        max_to_min_rate,
+                        price,
+                        price_state,
+                        price_state_cn,
+
+                        before_a_week_price,
+                        before_a_week_rate,
+                        before_a_week_real_rate,
+
+                        ensemble,
+                    }
+
+                    const trade = test_trade_auto_flow({...item, month_data})
+
                     ft_log = [
                         ...ft_log,
                         {
                             ...item,
-                            month_data: {
-                                all_day,
-                                price_max,
-                                spread_max_rate,
-                                price_min,
-                                spread_min_rate,
-                                max_to_min_rate,
-                                price,
-                                price_state,
-                                price_state_cn,
-
-                                before_a_week_price,
-                                before_a_week_rate,
-                                before_a_week_real_rate,
-
-                                ensemble,
-                            },
+                            month_data,
+                            ...trade,
                         }
                     ]
 
@@ -390,6 +395,11 @@ export default class System extends Component {
                     }
                     thumb={<Icon name='safety' size='md' color='black'/>}/>
                 <Card.Body>
+                    <List renderHeader={'真实交易'}>
+                        <List.Item wrap={true}>
+                            
+                        </List.Item>
+                    </List>
                     <List renderHeader={`备选品种(${data.length})`}>
                         <List.Item wrap={true}>
                             <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 6}}>
@@ -401,7 +411,7 @@ export default class System extends Component {
                             </View>
                         </List.Item>
                     </List>
-                    <List renderHeader={'接口数据'} style={{overflw: 'scroll'}}>
+                    <List renderHeader={`接口数据(${R.reduce((a, b) => a + b.total_profit, 0)(this.state.data)})`} style={{overflw: 'scroll'}}>
                         <List.Item wrap={true}>
                             <View style={{flexDirection: 'row', flowWrap: 'wrap', fontSize: 10}}>
                                 <Text style={{width: 50}}>品种</Text>
@@ -453,13 +463,47 @@ export default class System extends Component {
                                                         <Text style={{color: '#aaa'}}>倒三角趋势:</Text>
                                                         {
                                                             R.addIndex(R.map)(
-                                                                (v, k) => <Text style={{color: v.trend ? '#FF6A6A' : '#448847', width: 55}}>{v.name}{v.time_rang_rate} </Text>
+                                                                (v, k) => <Text key={k} style={{color: v.trend ? '#FF6A6A' : '#448847', width: 55}}>{v.name}{v.time_rang_rate} </Text>
                                                             )(v.month_data.ensemble.analy_120_80_40_20_10)
                                                         }
                                                     </View>
 
                                                     <View style={{marginBottom: 5}}>
-                                                        {flow.test_trade_auto_flow(v)}
+                                                        <View>
+                                                            <View>
+                                                                <Text style={{color: '#aaa'}}>测试自动交易流程:</Text>
+                                                                {
+                                                                    // R.addIndex(R.map)(
+                                                                    //     (v, k) => <Text key={k}>{k + 1} {v.time} {v.direction} {v.start_price} {v.price_state} {v.bond} {v.count} {v.result} {v.current_profit}</Text>
+                                                                    // )(trade_list)
+                                                                }
+
+                                                                {
+                                                                    R.compose(
+                                                                        R.addIndex(R.map)(
+                                                                            (v, k) => <Text key={k} style={{color: '#aaa'}}>{v.date} {v.current_price} {v.price_state_cn} {v.current_rang_rate} {v.direction} {v.build_trade ? '开仓' : '-'}</Text>
+                                                                        ),
+                                                                        R.takeLast(5)
+                                                                    )(v.analy_day_list)
+                                                                }
+                                                            </View>
+
+                                                            <View>
+                                                                <Text style={{color: '#aaa'}}>交易单: ({v.total_profit})</Text>
+
+                                                                {
+                                                                    R.compose(
+                                                                        R.addIndex(R.map)(
+                                                                            (v, k) => (
+                                                                                <Text key={k} style={{color: '#aaa'}}>
+                                                                                    {v.direction} {v.open_price} {v.count} {R.takeLast(5)(v.date)} {v.current_profit}({v.current_profit_rate}) {v.close_price} {v.status} {v.rb_update_count}
+                                                                                </Text>
+                                                                            )
+                                                                        ),
+                                                                    )(v.trade_list)
+                                                                }
+                                                            </View>
+                                                        </View>
                                                     </View>
                                                 </View>
                                             ) : null}
@@ -468,6 +512,13 @@ export default class System extends Component {
                                 ),
                                 R.sort(
                                     (a ,b) => {
+                                        // 依据测试交易盈利额排序
+                                        if(a.total_profit) {
+                                            return b.total_profit - a.total_profit
+                                        } else {
+                                            return true
+                                        }
+
                                         if(a.month_data) {
                                             return b.month_data.before_a_week_real_rate - a.month_data.before_a_week_real_rate
                                         } else {
