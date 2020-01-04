@@ -8,7 +8,6 @@ import {
   ScrollView,
   TabBarIOS,
   TouchableOpacity,
-  // AsyncStorage,
 } from 'react-native'
 
 import {
@@ -60,18 +59,6 @@ export default class System extends Component {
     }
 
     componentDidMount() {
-        // AsyncStorage.getItem('data', (e, rv) => {
-        //     if(rv) {
-        //         console.log('flow', '完成存储数据加载')
-        //         this.setState({
-        //             data: JSON.parse(rv),
-        //         })
-        //
-        //         this.fetch_current_data()
-        //     } else {
-        //         this.fetch_current_data()
-        //     }
-        // })
 
         this.fetch_current_data()
 
@@ -194,8 +181,6 @@ export default class System extends Component {
 
     handle_reload_log() {
 
-        // AsyncStorage.clear()
-
         const data = this.state.data
         let finish_count = 0
         let ft_log = []
@@ -289,12 +274,6 @@ export default class System extends Component {
                         this.setState({
                             data: ft_log,
                         })
-
-                        // try {
-                        //     AsyncStorage.setItem('data', JSON.stringify(ft_log))
-                        // } catch (error) {
-                        //     Toast.fail('存储数据失败！')
-                        // }
 
                         console.log('flow', '完成全部日志数据的请求', ft_log)
                         this.handle_reload_log_month()
@@ -430,12 +409,6 @@ export default class System extends Component {
                         this.setState({
                             data: ft_log,
                         })
-
-                        // try {
-                        //     AsyncStorage.setItem('data', JSON.stringify(ft_log))
-                        // } catch (error) {
-                        //     Toast.fail('存储数据失败！')
-                        // }
 
                         console.log('flow', '完成指定月合约日志数据的请求', ft_log)
                         // this.fetch_current_data()
@@ -703,9 +676,6 @@ export default class System extends Component {
                                         </List.Item>
                                     )
                                 ),
-                                // R.filter(
-                                //     v => v.trade_list && v.trade_list[v.trade_list.length - 1].status === '持仓'
-                                // ),
                                 R.sort(
                                     (a ,b) => {
                                         // if(a.trade_list) {
