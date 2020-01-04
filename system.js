@@ -535,8 +535,8 @@ export default class System extends Component {
                         {
                             R.addIndex(R.map)(
                                 (v, k) => (
-                                    <List.Item wrap={true}>
-                                        <View  key={k} style={{flexDirection: 'row', flexWrap: 'wrap',}}>
+                                    <List.Item key={k} wrap={true}>
+                                        <View style={{flexDirection: 'row', flexWrap: 'wrap',}}>
                                             <Text style={{width: 50, fontSize: 12,}}>
                                                 {R.takeLast(5)(v.status === '平仓' ? v.close_date : v.date)}
                                             </Text>
@@ -556,10 +556,10 @@ export default class System extends Component {
                                                 {v.status}
                                             </Text>
                                             <Text style={{width: 20, fontSize: 12,}}>
-                                                {v.rb_update_count}
+                                                {v.count}
                                             </Text>
                                             <Text style={{width: 20, fontSize: 12,}}>
-                                                {v.count}
+                                                {v.rb_update_count}
                                             </Text>
                                             <Text style={{width: 50, fontSize: 12,}}>
                                                 {v.current_profit}

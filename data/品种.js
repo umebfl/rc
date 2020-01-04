@@ -77,13 +77,13 @@ export default [
         unit: 10,
         month: '2005',
     },
-    {
-        code: 'RB',
-        name: '螺纹',
-        rate: 0.14,
-        unit: 10,
-        month: '2005',
-    },
+    // {
+    //     code: 'RB',
+    //     name: '螺纹',
+    //     rate: 0.14,
+    //     unit: 10,
+    //     month: '2005',
+    // },
     // {
     //     code: 'L',
     //     name: '塑料',
