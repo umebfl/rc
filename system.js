@@ -636,31 +636,31 @@ export default class System extends Component {
                                                                         R.addIndex(R.map)(
                                                                             (v, k) => (
                                                                                 <View  key={k} style={{flexDirection: 'row', flexWrap: 'wrap',}}>
-                                                                                    <Text style={{color: '#aaa', width: 30}}>
+                                                                                    <Text style={{color: '#aaa', width: 30, fontSize: 12,}}>
                                                                                         {v.direction}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                    <Text style={{color: '#aaa', width: 45, fontSize: 12,}}>
                                                                                         {v.open_price}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 20}}>
+                                                                                    <Text style={{color: '#aaa', width: 20, fontSize: 12,}}>
                                                                                         {v.count}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                    <Text style={{color: '#aaa', width: 45, fontSize: 12,}}>
                                                                                         {v.close_price || '-'}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                    <Text style={{color: '#aaa', width: 45, fontSize: 12,}}>
                                                                                         {R.takeLast(5)(v.date)}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 45}}>
+                                                                                    <Text style={{color: '#aaa', width: 45, fontSize: 12,}}>
                                                                                         {R.takeLast(5)(v.close_date || '-')}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 34}}>
+                                                                                    <Text style={{color: '#aaa', width: 34, fontSize: 12,}}>
                                                                                         {v.status}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 14}}>
+                                                                                    <Text style={{color: '#aaa', width: 14, fontSize: 12,}}>
                                                                                         {v.rb_update_count}
                                                                                     </Text>
-                                                                                    <Text style={{color: '#aaa', width: 50}}>
+                                                                                    <Text style={{color: '#aaa', width: 50, fontSize: 12,}}>
                                                                                         {v.current_profit}
                                                                                     </Text>
                                                                                 </View>

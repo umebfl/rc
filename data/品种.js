@@ -8,13 +8,6 @@ export default [
         month: '2006',
     },
     {
-        code: 'FU',
-        name: '燃油',
-        rate: 0.17,
-        unit: 10,
-        month: '2005',
-    },
-    {
         code: 'BU',
         name: '沥青',
         rate: 0.16,
@@ -26,13 +19,6 @@ export default [
         name: '沪镍',
         rate: 0.16,
         unit: 1,
-        month: '2005',
-    },
-    {
-        code: 'P',
-        name: '棕油',
-        rate: 0.10,
-        unit: 10,
         month: '2005',
     },
     {
@@ -50,20 +36,6 @@ export default [
         month: '2005',
     },
     {
-        code: 'CF',
-        name: '棉花',
-        rate: 0.10,
-        unit: 5,
-        month: '2005',
-    },
-    {
-        code: 'SR',
-        name: '白糖',
-        rate: 0.09,
-        unit: 10,
-        month: '2005',
-    },
-    {
         code: 'TA',
         name: 'PTA',
         rate: 0.11,
@@ -77,6 +49,36 @@ export default [
         unit: 10,
         month: '2005',
     },
+    {
+        code: 'P',
+        name: '棕油',
+        rate: 0.10,
+        unit: 10,
+        month: '2005',
+    },
+    {
+        code: 'FU',
+        name: '燃油',
+        rate: 0.17,
+        unit: 10,
+        month: '2005',
+    },
+
+
+    // {
+    //     code: 'CF',
+    //     name: '棉花',
+    //     rate: 0.10,
+    //     unit: 5,
+    //     month: '2005',
+    // },
+    // {
+    //     code: 'SR',
+    //     name: '白糖',
+    //     rate: 0.09,
+    //     unit: 10,
+    //     month: '2005',
+    // },
     // {
     //     code: 'RB',
     //     name: '螺纹',

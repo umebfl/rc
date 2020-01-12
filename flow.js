@@ -424,7 +424,7 @@ export const test_trade_auto_flow = (payload, setlog) => {
     let trade_list = []
 
     const all_day = R.takeLast(120)(payload.month_data.all_day)
-    // const all_day = payload.month_data.all_day
+    // const all_day = R.takeLast(250)(payload.all_day)
 
     const init_data_list = []
     const test_data_list = all_day
