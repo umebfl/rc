@@ -33,7 +33,7 @@ import {
     test_trade_auto_flow,
 }from './flow'
 
-import rule_var_list from './data/规则var.js'
+import rule_var_list from '../data/规则var.js'
 
 const analy_ensemble = all_day => {
     return {

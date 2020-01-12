@@ -26,8 +26,8 @@ import {
     Toast,
 } from '@ant-design/react-native'
 
-import rule_var_list from './data/规则var.js'
-import base_info from './data/基础信息.js'
+import rule_var_list from '../data/规则var.js'
+import base_info from '../data/基础信息.js'
 
 export const analy_120_to_10 = all_day => {
 

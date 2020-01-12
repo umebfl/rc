@@ -1,0 +1,5 @@
+1. git clone git@github.com:umebfl/rc.git && cd rc
+2. yarn install
+3. cd ios
+4. pod install && cd ../
+5. react-native run-ios
