@@ -38,28 +38,35 @@ import {
     action,
 } from './reducer'
 
-class Test extends Component {
+class Module extends Component {
+
+    // componentDidMount() {
+    //     this.timer_interval = setInterval(this.props.action.test, 1000)
+    // }
+    //
+    // componentWillUnmount() {
+    //     clearInterval(this.timer_interval)
+    // }
 
     render() {
 
         const {
-            home,
+            experiment,
         } = this.props
 
         return (
-            <View>
-              <Text>Home Screen</Text>
-              <Button title="Go to Details" onPress={() => this.props.navigation.navigate('Home')}/>
-            </View>
+            <SafeAreaView>
+
+            </SafeAreaView>
         )
     }
 }
 
 export default connect(
     state => ({
-        home: state.home,
+        experiment: state.experiment,
     }),
     dispatch => ({
         action: bindActionCreators(action, dispatch),
     })
-)(Test)
+)(Module)

@@ -1,25 +1,14 @@
 import R from 'ramda'
 import {createAction, handleActions} from 'redux-actions'
 
-const MODULE_KEY = 'home'
+const MODULE_KEY = 'experiment'
 
 const init_state = {
-    test: false,
+
 }
 
 
 export const action = {
-
-    test: payload => (dispatch, get_state) => {
-        const state = get_state()
-        const module_state = state[MODULE_KEY]
-
-        dispatch(
-            module_setter({
-                test: !module_state.test,
-            })
-        )
-    },
 
 }
 

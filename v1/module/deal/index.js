@@ -38,7 +38,7 @@ import {
     action,
 } from './reducer'
 
-class Home extends Component {
+class Module extends Component {
 
     // componentDidMount() {
     //     this.timer_interval = setInterval(this.props.action.test, 1000)
@@ -51,7 +51,7 @@ class Home extends Component {
     render() {
 
         const {
-            home,
+            deal,
         } = this.props
 
         return (
@@ -64,9 +64,9 @@ class Home extends Component {
 
 export default connect(
     state => ({
-        home: state.home,
+        deal: state.deal,
     }),
     dispatch => ({
         action: bindActionCreators(action, dispatch),
     })
-)(Home)
+)(Module)

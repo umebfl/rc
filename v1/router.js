@@ -10,67 +10,58 @@ import {
     Icon,
 } from '@ant-design/react-native'
 
-import Home from './module/home'
-import Test from './module/test'
+import Theme from './theme'
 
-// const AppNavigator = createStackNavigator({
-//     Home: {
-//         screen: Home,
-//     },
-//     Test: Test,
-// }, {
-//     initialRouteName: 'Home',
-//     headerMode: 'none',
-// })
+import Data from './module/data'
+import Deal from './module/deal'
+import Experiment from './module/experiment'
+import Note from './module/note'
+import RC from './module/RC'
 
 const AppNavigator = createMaterialBottomTabNavigator(
   {
-      Home: {
-          screen: Home,
+      Data: {
+          screen: Data,
           navigationOptions: {
-              title: '首页',
-              tabBarColor: '#4312AE',
-              tabBarIcon: (focused, horizontal, tintColor) => <Icon name='bank' size='md' color={tintColor}/>,
+              title: '数据',
+              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='bar-chart' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
           },
       },
-      Test1: {
-          screen: Test,
+      Deal: {
+          screen: Deal,
           navigationOptions: {
               title: '交易',
-              tabBarColor: '#472B83',
-              tabBarIcon: (focused, horizontal, tintColor) => <Icon name='project' size='md' color={tintColor}/>,
+              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='property-safety' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
           },
       },
-      Test2: {
-          screen: Test,
+      RC: {
+          screen: RC,
           navigationOptions: {
-              title: '理念',
-              tabBarColor: '#280671',
-              tabBarIcon: (focused, horizontal, tintColor) => <Icon name='star' size='md' color={tintColor}/>,
+              title: 'RC',
+              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='star' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
           },
       },
-      Test3: {
-          screen: Test,
+      Note: {
+          screen: Note,
           navigationOptions: {
-              title: '测试',
-              tabBarColor: '#472B83',
-              tabBarIcon: (focused, horizontal, tintColor) => <Icon name='fire' size='md' color={tintColor}/>,
+              title: '记录',
+              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
           },
       },
-      Test4: {
-          screen: Test,
+      Experiment: {
+          screen: Experiment,
           navigationOptions: {
-              title: '测试',
-              tabBarColor: '#4312AE',
-              tabBarIcon: (focused, horizontal, tintColor) => <Icon name='experiment' size='md' color={tintColor}/>,
+              title: '开放',
+              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='experiment' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
           },
       },
   },
   {
-    initialRouteName: 'Home',
-    shifting: true,
+    initialRouteName: 'RC',
+    shifting: false,
     labeled: true,
-    activeColor: 'white',
+    activeColor: Theme['primary-color'],
+    inactiveColor: '#AAA',
     barStyle: { backgroundColor: '#FFF' },
   }
 )
