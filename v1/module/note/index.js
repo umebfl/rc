@@ -40,13 +40,13 @@ import {
 
 class Module extends Component {
 
-    // componentDidMount() {
-    //     this.timer_interval = setInterval(this.props.action.test, 1000)
-    // }
-    //
-    // componentWillUnmount() {
-    //     clearInterval(this.timer_interval)
-    // }
+    componentDidMount() {
+        this.timer_interval = setInterval(this.props.action.test, 10000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer_interval)
+    }
 
     render() {
 
@@ -56,7 +56,7 @@ class Module extends Component {
 
         return (
             <SafeAreaView>
-
+                <Text>{JSON.stringify(note)}</Text>
             </SafeAreaView>
         )
     }
