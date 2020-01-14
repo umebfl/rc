@@ -13,7 +13,6 @@ import {
 
 import {
     Card,
-    WhiteSpace,
     Icon,
     Grid,
     Steps,
@@ -25,6 +24,8 @@ import {
     TextareaItem,
     Drawer,
     Toast,
+    WhiteSpace,
+    WingBlank,
 } from '@ant-design/react-native'
 
 import {
@@ -41,6 +42,33 @@ import {
 
 import Theme from '../../theme'
 
+const Item = List.Item
+const Brief = List.Item.Brief
+
+const Head = () => (
+    <View style={{
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Theme['primary-color'],
+    }}>
+        <Text style={{
+            color: 'white',
+            fontSize: 18,
+        }}>开发试验</Text>
+    </View>
+)
+
+const Element = ({data, handle_press}) => (
+    <List>
+        <Item
+            onPress={handle_press}
+            arrow='horizontal'>
+        React Native Chart Kit
+        </Item>
+    </List>
+)
+
 class Module extends Component {
 
     // componentDidMount() {
@@ -54,7 +82,9 @@ class Module extends Component {
     render() {
 
         const {
-            experiment,
+            RC,
+            breed,
+            navigation,
         } = this.props
 
         return (
@@ -65,6 +95,13 @@ class Module extends Component {
             }}>
                 <StatusBar barStyle='light-content'/>
 
+                <View style={{
+                    flex: 1,
+                    backgroundColor: 'white',
+                }}>
+                    <Head/>
+                    <Element data={breed.data} handle_press={() => navigation.navigate('experiment_test_react_native_chart_kit')}/>
+                </View>
             </SafeAreaView>
         )
     }
@@ -72,7 +109,8 @@ class Module extends Component {
 
 export default connect(
     state => ({
-        experiment: state.experiment,
+        RC: state.RC,
+        breed: state.breed,
     }),
     dispatch => ({
         action: bindActionCreators(action, dispatch),

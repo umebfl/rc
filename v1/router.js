@@ -21,6 +21,8 @@ import {
 import Home from './module/home'
 import Breed from './module/RC/breed'
 
+import Experiment_test_react_native_chart_kit from './module/experiment/test/react-native-chart-kit'
+
 import Theme from './theme'
 
 const get_nav_opt = (title) => ({
@@ -42,6 +44,11 @@ const AppNavigator = createStackNavigator({
     breed: {
         screen: Breed,
         navigationOptions: get_nav_opt('交易品种'),
+    },
+
+    experiment_test_react_native_chart_kit: {
+        screen: Experiment_test_react_native_chart_kit,
+        navigationOptions: get_nav_opt('react-native-chart-kit'),
     },
 }, {
     initialRouteName: 'home',
