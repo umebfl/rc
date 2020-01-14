@@ -8,6 +8,7 @@ import {
   ScrollView,
   TabBarIOS,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native'
 
 import {
@@ -38,15 +39,17 @@ import {
     action,
 } from './reducer'
 
+import Theme from '../../theme'
+
 class Module extends Component {
 
-    componentDidMount() {
-        this.timer_interval = setInterval(this.props.action.test, 10000)
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timer_interval)
-    }
+    // componentDidMount() {
+    //     this.timer_interval = setInterval(this.props.action.test, 10000)
+    // }
+    //
+    // componentWillUnmount() {
+    //     clearInterval(this.timer_interval)
+    // }
 
     render() {
 
@@ -55,8 +58,13 @@ class Module extends Component {
         } = this.props
 
         return (
-            <SafeAreaView>
-                <Text>{JSON.stringify(note)}</Text>
+            <SafeAreaView style={{
+                flex: 1,
+                backgroundColor: Theme['primary-color'],
+                flexDirection: 'column',
+            }}>
+                <StatusBar barStyle='light-content'/>
+
             </SafeAreaView>
         )
     }

@@ -1,69 +1,55 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Text, View} from 'react-native'
 
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
+
+import {
+  SafeAreaView,
+  View,
+  Text,
+  ScrollView,
+  TabBarIOS,
+  TouchableOpacity,
+  StatusBar,
+} from 'react-native'
 
 import {
     Icon,
 } from '@ant-design/react-native'
 
+import Home from './module/home'
+import Breed from './module/RC/breed'
+
 import Theme from './theme'
 
-import Data from './module/data'
-import Deal from './module/deal'
-import Experiment from './module/experiment'
-import Note from './module/note'
-import RC from './module/RC'
+const get_nav_opt = (title) => ({
+    title,
+    headerStyle: {backgroundColor: Theme['primary-color'], },
+    headerTitleStyle: {color: 'white', fontSize: 18, fontWeight: 'normal',},
+    headerBackTitle: ' ',
+    headerTintColor: 'white',
+    headerBackImage: () => <Icon name='left' size='md' color={'white'} style={{marginLeft: 10, fontSize: 28, width: 28, height: 28,}}/>,
+})
 
-const AppNavigator = createMaterialBottomTabNavigator(
-  {
-      Data: {
-          screen: Data,
-          navigationOptions: {
-              title: '数据',
-              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='bar-chart' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-          },
-      },
-      Deal: {
-          screen: Deal,
-          navigationOptions: {
-              title: '交易',
-              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='property-safety' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-          },
-      },
-      RC: {
-          screen: RC,
-          navigationOptions: {
-              title: 'RC',
-              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='star' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-          },
-      },
-      Note: {
-          screen: Note,
-          navigationOptions: {
-              title: '记录',
-              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-          },
-      },
-      Experiment: {
-          screen: Experiment,
-          navigationOptions: {
-              title: '开放',
-              tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='experiment' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-          },
-      },
-  },
-  {
-    initialRouteName: 'RC',
+const AppNavigator = createStackNavigator({
+    home: {
+        screen: Home,
+        navigationOptions: () => ({
+            header: null,
+        }),
+    },
+    breed: {
+        screen: Breed,
+        navigationOptions: get_nav_opt('交易品种'),
+    },
+}, {
+    initialRouteName: 'home',
     shifting: false,
     labeled: true,
     activeColor: Theme['primary-color'],
     inactiveColor: '#AAA',
     barStyle: { backgroundColor: '#FFF' },
-  }
-)
+})
 
 export default createAppContainer(AppNavigator)

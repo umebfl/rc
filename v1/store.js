@@ -2,7 +2,16 @@ import {createStore, applyMiddleware, compose} from 'redux'
 import rootReducer from './reducer.js'
 // import promiseMiddleware from 'redux-promise'
 import thunk from 'redux-thunk'
-import logger from 'redux-logger'
+// import logger from 'redux-logger'
+
+const logger = store => next => action => {
+    console.group(action.type)
+    console.info('dispatching', action)
+    let result = next(action)
+    console.log('next state', store.getState())
+    console.groupEnd(action.type)
+    return result
+}
 
 export default function configureStore() {
 
@@ -10,8 +19,8 @@ export default function configureStore() {
 
     store = createStore(
         rootReducer,
-        applyMiddleware(thunk),
-        // applyMiddleware(thunk, logger),
+        // applyMiddleware(thunk),
+        applyMiddleware(thunk, logger),
         // applyMiddleware(thunk, promiseMiddleware, logger),
     )
 

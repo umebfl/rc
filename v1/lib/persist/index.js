@@ -7,7 +7,7 @@ export const get = async (key, cb) => {
     try {
         const val = await AsyncStorage.getItem(key)
         cb && cb(val)
-        console.log(`persist | get: ${key} | val: ${val}`)
+        // console.log(`persist | get: ${key} | val: ${val}`)
         return val
     } catch(e) {
         handle_error(e)
@@ -18,7 +18,7 @@ export const get_list = async (key, cb) => {
     try {
         const val = await AsyncStorage.multiGet(key)
         cb && cb(val)
-        console.log(`persist | get_list: ${key} | val: ${val}`)
+        // console.log(`persist | get_list: ${key} | val: ${val}`)
         return val
     } catch(e) {
         handle_error(e)
@@ -27,7 +27,7 @@ export const get_list = async (key, cb) => {
 // 设置单个
 export const set = async (key, val) => {
     try {
-        console.log(`persist | set: ${key} | val:`, val)
+        // console.log(`persist | set: ${key} | val:`, val)
         if(typeof val !== 'string') {
             val = JSON.stringify(val)
         }
@@ -53,7 +53,7 @@ export const set_list = async (data, cb) => {
             )
         )(data)
 
-        console.log(`persist | set_list: ${JSON.stringify(rv, true)}`)
+        // console.log(`persist | set_list: ${JSON.stringify(rv, true)}`)
 
         await AsyncStorage.multiSet(rv)
         cb && cb()
@@ -85,7 +85,7 @@ export const clear = async cb => {
     try {
         await AsyncStorage.clear()
         cb && cb()
-        console.log('clear | 本地存储清理完成。')
+        // console.log('clear | 本地存储清理完成。')
     } catch(e) {
         handle_error(e)
     }
@@ -94,7 +94,7 @@ export const clear = async cb => {
 export const get_key_list = async () => {
     try {
         const val = await AsyncStorage.getAllKeys()
-        console.log('get_key_list | ', val)
+        // console.log('get_key_list | ', val)
         return val
     } catch(e) {
         handle_error(e)
@@ -115,9 +115,14 @@ export const get_all = async () => {
         const k = await AsyncStorage.getAllKeys()
         const data = await AsyncStorage.multiGet(k)
 
-        console.log(`get_all | ${JSON.stringify(data, true)}`)
+        // console.log(`get_all | ${JSON.stringify(data, true)}`)
 
-        return data
+        return R.compose(
+            R.fromPairs,
+            R.map(
+                R.adjust(1, JSON.parse)
+            )
+        )(data)
     } catch(e) {
         handle_error(e)
     }

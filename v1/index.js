@@ -3,8 +3,12 @@ import * as R from 'ramda'
 
 import { Provider } from 'react-redux'
 
+import {
+  Provider as RNProvider,
+} from '@ant-design/react-native';
+
+import Rehydrate from './module/rehydrate'
 import configureStore from './store'
-import Router from './router'
 
 export default class App extends Component {
 
@@ -18,7 +22,9 @@ export default class App extends Component {
     render() {
         return (
             <Provider store={this.state.store}>
-                <Router/>
+                <RNProvider>
+                    <Rehydrate/>
+                </RNProvider>
             </Provider>
         )
     }

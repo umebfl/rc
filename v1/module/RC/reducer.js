@@ -1,6 +1,7 @@
 import R from 'ramda'
 import {createAction, handleActions} from 'redux-actions'
 
+
 const MODULE_KEY = 'RC'
 
 const init_state = {
