@@ -60,20 +60,22 @@ const Head = () => (
 )
 
 const Element = ({data, handle_press}) => (
-    <List>
-        <Item
-            onPress={handle_press}
-            arrow='horizontal'
-            extra={R.compose(v => v.length, R.filter(v => !v.disable))(data)}
-            thumb={
-                <Icon style={{
-                    marginRight: 6,
-                    fontSize: 28,
-                }} name='bar-chart' color={Theme['primary-color']}/>
-            }>
-        交易品种
-        </Item>
-    </List>
+    <ScrollView>
+        <List>
+            <Item
+                onPress={handle_press}
+                arrow='horizontal'
+                extra={R.compose(v => v.length, R.filter(v => !v.disable))(data)}
+                thumb={
+                    <Icon style={{
+                        marginRight: 6,
+                        fontSize: 28,
+                    }} name='bar-chart' color={Theme['primary-color']}/>
+                }>
+            <Text style={{fontSize: 18, color: Theme['title-color']}}>交易品种</Text>
+            </Item>
+        </List>
+    </ScrollView>
 )
 
 class Module extends Component {

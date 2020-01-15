@@ -87,8 +87,8 @@ class Module extends Component {
                                             ])
                                         }}
                                         extra={v.disable ? null : <Icon name='check' size='md' color={Theme['primary-color']}/>}>
-                                        {v.name}
-                                        <Brief>{v.code}{v.month} {v.rate}({parseInt(1 / v.rate)}倍)</Brief>
+                                        <Text style={{fontSize: 16, color: Theme['title-color']}}>{v.name}</Text>
+                                        <Brief style={{fontSize: 12, color: Theme['text-color-secondary']}}>{v.code}{v.month} {v.rate}({parseInt(1 / v.rate)}倍)</Brief>
                                     </Item>
                                 )
                             )(data)

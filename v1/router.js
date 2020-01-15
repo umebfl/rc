@@ -20,14 +20,15 @@ import {
 
 import Home from './module/home'
 import Breed from './module/RC/breed'
+import Analy from './module/data/analy'
 
 import Experiment_test_react_native_chart_kit from './module/experiment/test/react-native-chart-kit'
 
 import Theme from './theme'
 
-const get_nav_opt = (title) => ({
+export const get_nav_opt = (title) => ({
     title,
-    headerStyle: {backgroundColor: Theme['primary-color'], },
+    headerStyle: {backgroundColor: Theme['primary-color'],},
     headerTitleStyle: {color: 'white', fontSize: 18, fontWeight: 'normal',},
     headerBackTitle: ' ',
     headerTintColor: 'white',
@@ -48,7 +49,12 @@ const AppNavigator = createStackNavigator({
 
     experiment_test_react_native_chart_kit: {
         screen: Experiment_test_react_native_chart_kit,
-        navigationOptions: get_nav_opt('react-native-chart-kit'),
+        navigationOptions: get_nav_opt('SVG图表'),
+    },
+
+    analy: {
+        screen: Analy,
+        // navigationOptions: get_nav_opt('品种分析'),
     },
 }, {
     initialRouteName: 'home',

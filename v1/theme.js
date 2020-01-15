@@ -7,6 +7,7 @@ export default {
      'font-size-base': '14px', // 主字号
      'heading-color': 'rgba(0, 0, 0, 0.85)', // 标题色
      'text-color': 'rgba(0, 0, 0, 0.65)', // 主文本色
+     'title-color': 'rgba(0, 0, 0, 0.8)', // 标题
      'text-color-secondary' : 'rgba(0, 0, 0, .45)', // 次文本色
      'disabled-color' : 'rgba(0, 0, 0, .25)', // 失效色
      'border-radius-base': '4px', // 组件/浮层圆角

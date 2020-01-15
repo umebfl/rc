@@ -104,7 +104,7 @@ export default class Module extends Component {
                             }
                           ]
                         }}
-                        width={Dimensions.get("window").width} // from react-native
+                        width={Dimensions.get("window").width - 10} // from react-native
                         height={220}
                         yAxisLabel="$"
                         yAxisSuffix="k"
@@ -116,7 +116,7 @@ export default class Module extends Component {
                           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                           style: {
-                            borderRadius: 16
+                            borderRadius: 4,
                           },
                           propsForDots: {
                             r: "6",
@@ -126,6 +126,7 @@ export default class Module extends Component {
                         }}
                         bezier
                         style={{
+                          marginLeft: 5,
                           marginVertical: 8,
                           borderRadius: 16
                         }}

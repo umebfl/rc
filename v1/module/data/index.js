@@ -13,7 +13,6 @@ import {
 
 import {
     Card,
-    WhiteSpace,
     Icon,
     Grid,
     Steps,
@@ -25,6 +24,8 @@ import {
     TextareaItem,
     Drawer,
     Toast,
+    WhiteSpace,
+    WingBlank,
 } from '@ant-design/react-native'
 
 import {
@@ -39,14 +40,126 @@ import {
     action,
 } from './reducer'
 
+import {
+    action as breed_action,
+} from '../RC/breed/reducer'
+
 import Theme from '../../theme'
 
+import {
+    red,
+    volcano,
+    gold,
+    yellow,
+    lime,
+    green,
+    cyan,
+    blue,
+    geekblue,
+    purple,
+    magenta,
+    grey,
+} from '@ant-design/colors'
+
+const Item = List.Item
+const Brief = List.Item.Brief
+
+const Head = () => (
+    <View style={{
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Theme['primary-color'],
+    }}>
+        <Text style={{
+            color: 'white',
+            fontSize: 18,
+        }}>数据分析</Text>
+    </View>
+)
+
+const BreedCurrentList = payload => {
+
+    const data = payload.data
+    const navigation = payload.navigation
+
+    return R.compose(
+        R.addIndex(R.map)(
+            (v, k) => (
+                <TouchableOpacity key={k} activeOpacity={0.5} onPress={() => navigation.navigate('analy', v)}>
+                    <Card full>
+                        <Card.Header
+                            title={(
+                                <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                    <Text style={{fontSize: 16, color: blue[6]}}>{`${v.name}`}</Text>
+                                    <Text style={{fontSize: 12, marginLeft: 4, color: Theme['text-color-secondary']}}>{`${v.code}${v.month}`}</Text>
+                                </View>
+                            )}
+                            extra={(
+                                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                    <Icon style={{
+                                        marginLeft: 4,
+                                        color: grey[4],
+                                    }} name='ellipsis'/>
+                                </View>
+                            )}/>
+                        <Card.Body style={{borderTopWidth: 0,}}>
+                            <View style={{ height: 42, flexDirection: 'row',}}>
+                                <Text style={{
+                                    marginLeft: 16,
+                                    fontSize: 22,
+                                    color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                                }}>{v.最新价}</Text>
+
+                                <Icon style={{
+                                    marginLeft: 4,
+                                    fontSize: 12,
+                                    color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                                }} name={v.最新价 > v.开盘价 ? 'arrow-up' : 'arrow-down'} color={Theme['primary-color']}/>
+
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                                }}>{((v.最新价 - v.开盘价) / v.开盘价 * 100).toFixed(2)}%</Text>
+                            </View>
+                        </Card.Body>
+                        <Card.Footer
+                            content={(
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                    <Text style={{color: Theme['text-color-secondary']}}>开盘价: {v.开盘价}</Text>
+                                    <Text style={{color: Theme['text-color-secondary']}}>最高价: {v.最高价}</Text>
+                                    <Text style={{color: Theme['text-color-secondary']}}>最低价: {v.最低价}</Text>
+                                </View>
+                            )}
+                            extra={''}/>
+                    </Card>
+                    <WhiteSpace/>
+                </TouchableOpacity>
+            )
+        ),
+        R.filter(v => !v.disable)
+    )(data)
+}
+
+const SEARCH_INTERVAL = 60 * 1000
+
 class Module extends Component {
+
+    componentDidMount() {
+        this.props.action.search_current_data()
+        this.timer_interval = setInterval(this.props.action.search_current_data, SEARCH_INTERVAL)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer_interval)
+    }
 
     render() {
 
         const {
-            data,
+            breed: {
+                data,
+            },
         } = this.props
 
         return (
@@ -57,6 +170,16 @@ class Module extends Component {
             }}>
                 <StatusBar barStyle='light-content'/>
 
+                <View style={{
+                    flex: 1,
+                    backgroundColor: 'white',
+                }}>
+                    <Head/>
+
+                    <ScrollView>
+                        <BreedCurrentList data={data} {...this.props}/>
+                    </ScrollView>
+                </View>
             </SafeAreaView>
         )
     }
@@ -64,9 +187,9 @@ class Module extends Component {
 
 export default connect(
     state => ({
-        data: state.data,
+        breed: state.breed,
     }),
     dispatch => ({
-        action: bindActionCreators(action, dispatch),
+        action: bindActionCreators({...action, ...breed_action}, dispatch),
     })
 )(Module)

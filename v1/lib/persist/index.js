@@ -27,7 +27,7 @@ export const get_list = async (key, cb) => {
 // 设置单个
 export const set = async (key, val) => {
     try {
-        // console.log(`persist | set: ${key} | val:`, val)
+        console.log(`persist | set: ${key} | val:`, val)
         if(typeof val !== 'string') {
             val = JSON.stringify(val)
         }
@@ -115,7 +115,7 @@ export const get_all = async () => {
         const k = await AsyncStorage.getAllKeys()
         const data = await AsyncStorage.multiGet(k)
 
-        // console.log(`get_all | ${JSON.stringify(data, true)}`)
+        console.log(`get_all | ${JSON.stringify(data, true)}`)
 
         return R.compose(
             R.fromPairs,

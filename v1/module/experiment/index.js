@@ -64,7 +64,8 @@ const Element = ({data, handle_press}) => (
         <Item
             onPress={handle_press}
             arrow='horizontal'>
-        React Native Chart Kit
+
+            <Text style={{fontSize: 18, color: Theme['title-color']}}>React Native Chart Kit</Text>
         </Item>
     </List>
 )
