@@ -1,0 +1,88 @@
+{
+  "name": "wsapp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "jcore-react-native": "^1.1.7",
+    "jpush-react-native": "^1.7.1",
+    "react": "^16.0.0-beta.2",
+    "react-native": "^0.46.4",
+    "react-native-android-badge": "^0.4.2",
+    "react-native-code-push": "^2.0.3-beta",
+    "react-native-datepicker": "^1.6.0",
+    "react-native-device-info": "^0.10.2",
+    "react-native-image-crop-picker": "^0.14.4",
+    "react-native-inputscrollview": "^2.0.1",
+    "react-native-keyboard-aware-scroll-view": "^0.3.0",
+    "react-native-parallax-view": "^2.0.6",
+    "react-native-share": "^1.0.21",
+    "react-navigation": "git+https://github.com/martnu/react-navigation.git#pass-down-drawer-lock-mode"
+  },
+  "devDependencies": {
+    "babel-jest": "19.0.0",
+    "babel-preset-react-native": "1.9.1",
+    "buffer": "^5.0.6",
+    "express": "^4.15.3",
+    "jest": "19.0.2",
+    "jscodeshift": "^0.3.32",
+    "moment": "^2.18.1",
+    "ramda": "^0.24.1",
+    "react-native-cookies": "^3.2.0",
+    "react-native-drawer": "^2.3.0",
+    "react-native-exception-handler": "^1.0.1",
+    "react-native-google-analytics-bridge": "^5.2.2",
+    "react-native-indicator": "^0.6.7",
+    "react-native-interactable": "0.0.9",
+    "react-native-md5": "^1.0.0",
+    "react-native-modal-dropdown": "^0.4.4",
+    "react-native-parallax-scroll-view": "^0.19.0",
+    "react-native-root-toast": "^1.1.2",
+    "react-native-scrollable-tab-view": "^0.6.6",
+    "react-redux": "^5.0.4",
+    "react-test-renderer": "16.0.0-alpha.6",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-logger": "^3.0.1",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0",
+    "sprintf": "^0.1.5"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "common": {
+    "常用": {
+      "搜索git历史记录中的内容": "git log -p |grep \"删除掉内容\"",
+      "DOS-关闭进程": "taskkill /pid [port] /f",
+      "DOS-查看端口占用": "netstat  -aon|findstr  \"[port]\"",
+      "reacat-native0.44.0升级0.45.1": "react-native upgrade && react-native-git-upgrade",
+      "重装应用": "git clone https://github.com/huanganqi/wsapp.git --depth=1 && cd wsapp && npm install && git clone https://github.com/reactjs/react-codemod.git && cd react-codemod && yarn install && cd .. && jscodeshift -t react-codemod/transforms/React-PropTypes-to-prop-types.js ./ && jscodeshift -t react-codemod/transforms/class.js ./ && rm -rf react-codemod && react-native run-ios"
+    },
+    "构建": {
+      "网络优化": "npm config set registry http://registry.npm.taobao.org",
+      "初始化": "react-native init 项目名",
+      "bundlejs构建查看": "http://localhost:8081/index.android.bundle?platform=android",
+      "redux调试": "http://localhost:8081/debugger-ui"
+    },
+    "依赖": {
+      "redux": "redux",
+      "redux-异步action": "redux-thunk",
+      "redux-actions": "redux模板代码封装",
+      "函数式工具库": "ramdajs",
+      "日期库": "moment",
+      "导航": "react-native-router-flux",
+      "组件": "native-base",
+      "测试": "jest react-test-renderer",
+      "base64支持": "buffer",
+      "MD5支持": "react-native-md5",
+      "加载组件": "react-native-spinkit ?",
+      "字符串格式化": "sprintf",
+      "高斯模糊": "npm install --save-dev react-native-blur && react-native link react-native-blur"
+    }
+  }
+}
