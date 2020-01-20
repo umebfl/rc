@@ -1,3 +1,18 @@
+import {
+    red,
+    volcano,
+    gold,
+    yellow,
+    lime,
+    green,
+    cyan,
+    blue,
+    geekblue,
+    purple,
+    magenta,
+    grey,
+} from '@ant-design/colors'
+
 export default {
      'primary-color': '#1890ff', // 全局主色
      'link-color': '#1890ff', // 链接色
@@ -13,4 +28,6 @@ export default {
      'border-radius-base': '4px', // 组件/浮层圆角
      'border-color-base': '#d9d9d9', // 边框色
      'box-shadow-base': '0 2px 8px rgba(0, 0, 0, 0.15)', // 浮层阴影
+
+     'border-defalut-color': 'rgba(200, 200, 200, 0.5)', // 边框线条颜色
 }

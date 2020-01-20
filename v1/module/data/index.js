@@ -87,53 +87,60 @@ const BreedCurrentList = payload => {
         R.addIndex(R.map)(
             (v, k) => (
                 <TouchableOpacity key={k} activeOpacity={0.5} onPress={() => navigation.navigate('analy', v)}>
-                    <Card full>
-                        <Card.Header
-                            title={(
+                    <View style={{
+                        flexDirection: 'column',
+                        borderBottomWidth: 0.3,
+                        borderBottomColor: Theme['border-defalut-color'],
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                    }}>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+                            <View style={{flexDirection: 'row', paddingTop: 20, paddingBottom: 10, }}>
                                 <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
                                     <Text style={{fontSize: 16, color: blue[6]}}>{`${v.name}`}</Text>
                                     <Text style={{fontSize: 12, marginLeft: 4, color: Theme['text-color-secondary']}}>{`${v.code}${v.month}`}</Text>
                                 </View>
-                            )}
-                            extra={(
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                    <Icon style={{
-                                        marginLeft: 4,
-                                        color: grey[4],
-                                    }} name='ellipsis'/>
-                                </View>
-                            )}/>
-                        <Card.Body style={{borderTopWidth: 0,}}>
-                            <View style={{ height: 42, flexDirection: 'row',}}>
-                                <Text style={{
-                                    marginLeft: 16,
-                                    fontSize: 22,
-                                    color: v.最新价 > v.开盘价 ? red[5] : green[5],
-                                }}>{v.最新价}</Text>
+                            </View>
+                        </View>
+                        <View style={{height: 76, flexDirection: 'row', }}>
+                            <Text style={{
+                                paddingTop: 10,
+                                paddingLeft: 16,
+                                fontSize: 26,
+                                color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                            }}>{v.最新价}</Text>
 
+                            <Icon style={{
+                                paddingTop: 8,
+                                marginLeft: 4,
+                                fontSize: 12,
+                                color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                            }} name={v.最新价 > v.开盘价 ? 'arrow-up' : 'arrow-down'} color={Theme['primary-color']}/>
+
+                            <Text style={{
+                                paddingTop: 8,
+                                fontSize: 12,
+                                color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                            }}>{((v.最新价 - v.开盘价) / v.开盘价 * 100).toFixed(2)}%</Text>
+                        </View>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            paddingBottom: 15,
+                            paddingLeft: 16,
+                            alignItems: 'center',
+                        }}>
+                            <Text style={{color: Theme['text-color-secondary']}}>开盘价: {v.开盘价}</Text>
+                            <Text style={{color: Theme['text-color-secondary']}}>最高价: {v.最高价}</Text>
+                            <Text style={{color: Theme['text-color-secondary']}}>最低价: {v.最低价}</Text>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                                 <Icon style={{
                                     marginLeft: 4,
-                                    fontSize: 12,
-                                    color: v.最新价 > v.开盘价 ? red[5] : green[5],
-                                }} name={v.最新价 > v.开盘价 ? 'arrow-up' : 'arrow-down'} color={Theme['primary-color']}/>
-
-                                <Text style={{
-                                    fontSize: 12,
-                                    color: v.最新价 > v.开盘价 ? red[5] : green[5],
-                                }}>{((v.最新价 - v.开盘价) / v.开盘价 * 100).toFixed(2)}%</Text>
+                                    color: grey[4],
+                                }} name='ellipsis'/>
                             </View>
-                        </Card.Body>
-                        <Card.Footer
-                            content={(
-                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                    <Text style={{color: Theme['text-color-secondary']}}>开盘价: {v.开盘价}</Text>
-                                    <Text style={{color: Theme['text-color-secondary']}}>最高价: {v.最高价}</Text>
-                                    <Text style={{color: Theme['text-color-secondary']}}>最低价: {v.最低价}</Text>
-                                </View>
-                            )}
-                            extra={''}/>
-                    </Card>
-                    <WhiteSpace/>
+                        </View>
+                    </View>
                 </TouchableOpacity>
             )
         ),

@@ -59,12 +59,11 @@ const Head = () => (
     </View>
 )
 
-const Element = ({data, handle_press}) => (
+const Element = ({data, navigation}) => (
     <List>
         <Item
-            onPress={handle_press}
+            onPress={() => navigation.navigate('experiment_test_react_native_chart_kit')}
             arrow='horizontal'>
-
             <Text style={{fontSize: 18, color: Theme['title-color']}}>React Native Chart Kit</Text>
         </Item>
     </List>
@@ -101,7 +100,7 @@ class Module extends Component {
                     backgroundColor: 'white',
                 }}>
                     <Head/>
-                    <Element data={breed.data} handle_press={() => navigation.navigate('experiment_test_react_native_chart_kit')}/>
+                    <Element data={breed.data} navigation={navigation}/>
                 </View>
             </SafeAreaView>
         )

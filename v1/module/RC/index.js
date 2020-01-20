@@ -74,6 +74,18 @@ const Element = ({data, handle_press}) => (
                 }>
             <Text style={{fontSize: 18, color: Theme['title-color']}}>交易品种</Text>
             </Item>
+            <Item
+                onPress={handle_press}
+                arrow='horizontal'
+                extra={'0'}
+                thumb={
+                    <Icon style={{
+                        marginRight: 6,
+                        fontSize: 28,
+                    }} name='transaction' color={Theme['primary-color']}/>
+                }>
+            <Text style={{fontSize: 18, color: Theme['title-color']}}>盈利资金分配</Text>
+            </Item>
         </List>
     </ScrollView>
 )

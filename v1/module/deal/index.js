@@ -13,7 +13,6 @@ import {
 
 import {
     Card,
-    WhiteSpace,
     Icon,
     Grid,
     Steps,
@@ -25,6 +24,8 @@ import {
     TextareaItem,
     Drawer,
     Toast,
+    WhiteSpace,
+    WingBlank,
 } from '@ant-design/react-native'
 
 import {
@@ -41,6 +42,23 @@ import {
 
 import Theme from '../../theme'
 
+const Item = List.Item
+const Brief = List.Item.Brief
+
+const Head = () => (
+    <View style={{
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Theme['primary-color'],
+    }}>
+        <Text style={{
+            color: 'white',
+            fontSize: 18,
+        }}>交易</Text>
+    </View>
+)
+
 class Module extends Component {
 
     // componentDidMount() {
@@ -54,7 +72,9 @@ class Module extends Component {
     render() {
 
         const {
-            deal,
+            RC,
+            breed,
+            navigation,
         } = this.props
 
         return (
@@ -65,6 +85,12 @@ class Module extends Component {
             }}>
                 <StatusBar barStyle='light-content'/>
 
+                <View style={{
+                    flex: 1,
+                    backgroundColor: 'white',
+                }}>
+                    <Head/>
+                </View>
             </SafeAreaView>
         )
     }
@@ -72,7 +98,8 @@ class Module extends Component {
 
 export default connect(
     state => ({
-        deal: state.deal,
+        RC: state.RC,
+        breed: state.breed,
     }),
     dispatch => ({
         action: bindActionCreators(action, dispatch),
