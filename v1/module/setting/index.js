@@ -55,7 +55,7 @@ const Head = () => (
         <Text style={{
             color: 'white',
             fontSize: 18,
-        }}>风险控制</Text>
+        }}>设置</Text>
     </View>
 )
 
@@ -103,7 +103,7 @@ class Module extends Component {
     render() {
 
         const {
-            RC,
+            setting,
             breed,
             navigation,
         } = this.props
@@ -130,7 +130,7 @@ class Module extends Component {
 
 export default connect(
     state => ({
-        RC: state.RC,
+        setting: state.setting,
         breed: state.breed,
     }),
     dispatch => ({

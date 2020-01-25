@@ -16,15 +16,15 @@ import Data from '../data'
 import Deal from '../deal'
 import Experiment from '../experiment'
 import Note from '../note'
-import RC from '../RC'
+import Setting from '../setting'
 
 const AppNavigator = createMaterialBottomTabNavigator(
     {
-        data: {
-            screen: Data,
+        note: {
+            screen: Note,
             navigationOptions: {
-                title: '数据',
-                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='bar-chart' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+                title: '记录',
+                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },
         deal: {
@@ -34,19 +34,18 @@ const AppNavigator = createMaterialBottomTabNavigator(
                 tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='property-safety' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },
-        RC: {
-            screen: RC,
+        data: {
+            screen: Data,
             navigationOptions: {
-                title: 'RC',
-                headerTitle: '风控',
+                title: '数据',
                 tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='star' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },
-        note: {
-            screen: Note,
+        setting: {
+            screen: Setting,
             navigationOptions: {
-                title: '记录',
-                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+                title: '设置',
+                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='setting' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },
         experiment: {
@@ -58,7 +57,7 @@ const AppNavigator = createMaterialBottomTabNavigator(
         },
     },
     {
-        initialRouteName: 'RC',
+        initialRouteName: 'data',
         shifting: false,
         labeled: true,
         activeColor: Theme['primary-color'],

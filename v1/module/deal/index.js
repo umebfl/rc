@@ -72,7 +72,7 @@ class Module extends Component {
     render() {
 
         const {
-            RC,
+            setting,
             breed,
             navigation,
         } = this.props
@@ -98,7 +98,7 @@ class Module extends Component {
 
 export default connect(
     state => ({
-        RC: state.RC,
+        setting: state.setting,
         breed: state.breed,
     }),
     dispatch => ({

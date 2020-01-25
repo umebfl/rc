@@ -42,7 +42,7 @@ import {
 
 import {
     action as breed_action,
-} from '../RC/breed/reducer'
+} from '../setting/breed/reducer'
 
 import Theme from '../../theme'
 

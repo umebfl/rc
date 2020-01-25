@@ -1,9 +1,13 @@
 import R from 'ramda'
 import {createAction, handleActions} from 'redux-actions'
 
+import idea from '../../../data/理念'
+
 const MODULE_KEY = 'note'
 
 const init_state = {
+
+    idea: idea,
 
 }
 

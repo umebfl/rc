@@ -60,13 +60,13 @@
 		29E027062D959E57873A7D09 /* Pods-rcTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rcTests.debug.xcconfig"; path = "Target Support Files/Pods-rcTests/Pods-rcTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* rc-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "rc-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* rc-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "rc-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3C6D6AAD523746F1A87D0589 /* antoutline.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
+		3C6D6AAD523746F1A87D0589 /* antoutline.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		418A24AFC832CE4E1F7CAB9B /* Pods-rc-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rc-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-rc-tvOS/Pods-rc-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5B67A5872011AD3030392146 /* libPods-rc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A5E0F282657F4390F0658AF /* Pods-rc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rc.release.xcconfig"; path = "Target Support Files/Pods-rc/Pods-rc.release.xcconfig"; sourceTree = "<group>"; };
 		B09484194C6842BA79BEB034 /* Pods-rc-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rc-tvOS.release.xcconfig"; path = "Target Support Files/Pods-rc-tvOS/Pods-rc-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		D9AD08DDDDDB38596489B37F /* Pods-rc-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rc-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-rc-tvOSTests/Pods-rc-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		E47E1613855B43038A3FEF33 /* antfill.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
+		E47E1613855B43038A3FEF33 /* antfill.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
 		E66403DEF0E2447940B8AE95 /* Pods-rc-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rc-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-rc-tvOSTests/Pods-rc-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -209,7 +209,6 @@
 				3C6D6AAD523746F1A87D0589 /* antoutline.ttf */,
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

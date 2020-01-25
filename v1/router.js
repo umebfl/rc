@@ -19,10 +19,11 @@ import {
 } from '@ant-design/react-native'
 
 import Home from './module/home'
-import Breed from './module/RC/breed'
+import Breed from './module/setting/breed'
 import Analy from './module/data/analy'
 
 import Experiment_test_react_native_chart_kit from './module/experiment/test/react-native-chart-kit'
+import Experiment_test_react_native_scrollable_tab_view from './module/experiment/test/react-native-scrollable-tab-view'
 
 import Theme from './theme'
 
@@ -50,6 +51,10 @@ const AppNavigator = createStackNavigator({
     experiment_test_react_native_chart_kit: {
         screen: Experiment_test_react_native_chart_kit,
         navigationOptions: get_nav_opt('SVG图表'),
+    },
+    experiment_test_react_native_scrollable_tab_view: {
+        screen: Experiment_test_react_native_scrollable_tab_view,
+        navigationOptions: get_nav_opt('tab滑动'),
     },
 
     analy: {

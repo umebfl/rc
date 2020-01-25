@@ -5,8 +5,8 @@ import data from './module/data/reducer'
 import deal from './module/deal/reducer'
 import experiment from './module/experiment/reducer'
 import note from './module/note/reducer'
-import RC from './module/RC/reducer'
-import breed from './module/RC/breed/reducer'
+import setting from './module/setting/reducer'
+import breed from './module/setting/breed/reducer'
 import {REHYDRATE_KEY} from './module/rehydrate'
 
 export const AUTH_SIGNOUT = 'redux_auth_signout'
@@ -17,7 +17,7 @@ const app_reducer = combineReducers({
     experiment,
     note,
 
-    RC,
+    setting,
     breed,
 })
 

@@ -2,7 +2,7 @@ import R from 'ramda'
 import {createAction, handleActions} from 'redux-actions'
 
 
-const MODULE_KEY = 'RC'
+const MODULE_KEY = 'setting'
 
 const init_state = {
 

@@ -68,7 +68,7 @@ import {
 
 import Theme from '../../../theme'
 import {get_nav_opt} from '../../../router'
-import {action as breed_action} from '../../RC/breed/reducer'
+import {action as breed_action} from '../../setting/breed/reducer'
 
 class Module extends Component {
 

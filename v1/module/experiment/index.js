@@ -66,6 +66,11 @@ const Element = ({data, navigation}) => (
             arrow='horizontal'>
             <Text style={{fontSize: 18, color: Theme['title-color']}}>React Native Chart Kit</Text>
         </Item>
+        <Item
+            onPress={() => navigation.navigate('experiment_test_react_native_scrollable_tab_view')}
+            arrow='horizontal'>
+            <Text style={{fontSize: 18, color: Theme['title-color']}}>React native scrollable tab view</Text>
+        </Item>
     </List>
 )
 
@@ -82,7 +87,7 @@ class Module extends Component {
     render() {
 
         const {
-            RC,
+            setting,
             breed,
             navigation,
         } = this.props
@@ -109,7 +114,7 @@ class Module extends Component {
 
 export default connect(
     state => ({
-        RC: state.RC,
+        setting: state.setting,
         breed: state.breed,
     }),
     dispatch => ({

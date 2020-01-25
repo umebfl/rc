@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import * as R from 'ramda'
 
 import {
-  SafeAreaView,
-  View,
-  Text,
-  ScrollView,
-  TabBarIOS,
-  TouchableOpacity,
+    SafeAreaView,
+    View,
+    Text,
+    ScrollView,
+    TabBarIOS,
+    TouchableOpacity,
 } from 'react-native'
 
 import {

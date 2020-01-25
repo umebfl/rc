@@ -59,6 +59,38 @@ const Head = () => (
     </View>
 )
 
+const Content = payload => (
+    <ScrollView>
+        {
+            R.addIndex(R.map)(
+                (v, k) => (
+                    <View key={k} style={{
+                        flexDirection: 'row',
+                    }}>
+                        <View style={{width: 60, }}>
+                            <View style={{paddingTop: 10, alignItems: 'center', justifyContent: 'center'}}>
+                                <View style={{width: 30, height: 30, justifyContent: 'center', alignItems: 'center', borderRadius: 100, borderWidth: 0.3, borderColor: Theme['primary-color'], }}>
+                                    <Text style={{fontSize: 12, color: Theme['primary-color']}}>{v.type}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={{paddingTop: 10, paddingBottom: 10, paddingRight: 20, borderBottomWidth: 0.3, borderBottomColor: Theme['border-defalut-color'], flex: 1,}}>
+                            <View style={{paddingTop: 5, paddingBottom: 5,}}>
+                                <Text style={{fontSize: 10, color: Theme['text-color-secondary']}}>{v.date}</Text>
+                            </View>
+                            <View style={{paddingTop: 10, paddingBottom: 10,}}>
+                                <Text style={{lineHeight: 24, fontSize: 16, color: Theme['text-color']}}>
+                                    {v.content}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                )
+            )(payload.note ? payload.note.idea : [])
+        }
+    </ScrollView>
+)
+
 class Module extends Component {
 
     // componentDidMount() {
@@ -72,7 +104,8 @@ class Module extends Component {
     render() {
 
         const {
-            RC,
+            setting,
+            note,
             breed,
             navigation,
         } = this.props
@@ -90,6 +123,8 @@ class Module extends Component {
                     backgroundColor: 'white',
                 }}>
                     <Head/>
+
+                    <Content {...this.props}/>
                 </View>
             </SafeAreaView>
         )
@@ -98,8 +133,9 @@ class Module extends Component {
 
 export default connect(
     state => ({
-        RC: state.RC,
+        setting: state.setting,
         breed: state.breed,
+        note: state.note,
     }),
     dispatch => ({
         action: bindActionCreators(action, dispatch),
