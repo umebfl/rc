@@ -19,8 +19,8 @@ export default function configureStore() {
 
     store = createStore(
         rootReducer,
-        // applyMiddleware(thunk),
-        applyMiddleware(thunk, logger),
+        applyMiddleware(thunk),
+        // applyMiddleware(thunk, logger),
         // applyMiddleware(thunk, promiseMiddleware, logger),
     )
 

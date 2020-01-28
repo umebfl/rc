@@ -37,7 +37,7 @@ const AppNavigator = createMaterialBottomTabNavigator(
         data: {
             screen: Data,
             navigationOptions: {
-                title: '数据',
+                title: 'RC',
                 tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='star' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },

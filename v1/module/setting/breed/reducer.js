@@ -4,13 +4,112 @@ import {createAction, handleActions} from 'redux-actions'
 import * as persist from '../../../lib/persist'
 
 import breed from '../../../../data/品种'
+import rule_list from '../../../../data/规则var'
 
 import ajax from '../../../lib/ajax/index'
 
 export const MODULE_KEY = 'breed'
 
+const STATUS_观望 = '观望'
+const STATUS_入场 = '入场'
+
+const HOLD_多 = '多'
+const HOLD_空 = '空'
+
 const init_state = {
     data: breed,
+}
+
+const ai_cal = (all_day, rule) => {
+
+    // 每日判定信息
+    let cal_info_list = []
+
+    R.map(
+        price_info => {
+            let cal_info = {
+                // 5日连续价格
+                five_day_price: [],
+
+                // 入场系数
+                open_coe: 0,
+                // 方向系数
+                dir_coe: 0, // -1 0 1
+                // 出场系数
+                close_coe: 0,
+                // 加仓系数
+                add_coe: 0,
+                // 减仓系数
+                reduce_coe: 0,
+
+                // op
+                status: STATUS_观望,
+
+                // 持仓方向
+                hold_dir: HOLD_多,
+                // 持仓手数
+                hold_count: 0,
+                // 持仓价格
+                hold_price: 0,
+
+                // 加仓次数
+                hold_add_count: 0,
+                // 加仓前盈利
+                hold_profit: 0,
+            }
+
+            if(cal_info_list.length) {
+                const last_cal = cal_info_list[cal_info_list.length - 1]
+                const last_price_info = last_cal.price_info
+                const last_cal_info = last_cal.cal_info
+
+                // 计算前后两天的价格波动
+                const last_price = last_price_info[4]
+                const curr_price = price_info[4]
+
+                const price_wave_num = curr_price - last_price
+                const price_wave_rate = parseFloat((price_wave_num / last_price * 100).toFixed(2))
+
+                // 5日连续价格波动
+                let five_day_price = last_cal_info.five_day_price
+
+                let five_day_price_wave_num = 0
+                let five_day_price_wave_rate = 0
+
+                five_day_price = R.takeLast(5, [...five_day_price, price_info[4]])
+
+                if(five_day_price.length === 5) {
+                    const five_day_last_price = five_day_price[five_day_price.length - 1]
+                    five_day_price_wave_num = five_day_price[0] - five_day_last_price
+                    five_day_price_wave_rate = parseFloat((five_day_price_wave_num / five_day_last_price * 100).toFixed(2))
+                }
+
+                cal_info = {
+                    ...cal_info,
+
+                    five_day_price,
+
+                    price_wave_num,
+                    price_wave_rate,
+
+                    five_day_price_wave_num,
+                    five_day_price_wave_rate,
+                }
+            }
+
+            cal_info_list = [
+                ...cal_info_list,
+                {
+                    // 交易信息
+                    price_info,
+
+                    cal_info,
+                },
+            ]
+        }
+    )(all_day)
+
+    return cal_info_list
 }
 
 const _search_current_data = (dispatch, get_state) => {
@@ -52,8 +151,8 @@ const _search_current_data = (dispatch, get_state) => {
                         '最新价': price,
                         '持仓量': parseInt(info[13]),
                         '成交量': parseInt(info[14]),
-                        '当前一手保证金': current_bond,
-                        '当前持仓总金额': current_bond * info[13],
+                        '当前一手保证金': parseInt(current_bond),
+                        '当前持仓总金额': parseInt(current_bond * info[13]),
                     }
                 ]
             }
@@ -65,6 +164,8 @@ const _search_current_data = (dispatch, get_state) => {
                 data: ft_log,
             })
         )
+
+        _batch_search_all_day_data(dispatch, get_state)
     })
 }
 
@@ -105,15 +206,14 @@ const _search_all_day_data = (dispatch, get_state, code, month) => {
             }),
         )(all_day)
 
-        // const build = (index, all_day, breed) => R.adjust(index, R.assoc('all_day', all_day))(breed)
-        //
-        // const curry_build = R.curry(build)
-        //
-        // const currb = curry_build(breed_index, all_day)
-        //
-        // const d = currb(module_state)
-        //
-        // console.log('d', d)
+        // 执行测算
+        const ai_cal_rv = R.map(
+            v => ai_cal(all_day, v)
+        )(rule_list)
+
+        // 执行统计
+
+        // 执行交易提示
 
         dispatch(
             module_setter({
@@ -123,16 +223,25 @@ const _search_all_day_data = (dispatch, get_state, code, month) => {
                         ...v,
                         all_day,
                         all_day_chart,
+                        ai_cal_rv,
                     })
                 )(module_state),
             })
         )
+
     })
 
 }
 
 const _batch_search_all_day_data = (dispatch, get_state) => {
+    const state = get_state()
+    const module_state = state[MODULE_KEY]
 
+    const bread_list = R.filter(v => !v.disable)(module_state.data)
+
+    R.map(
+        v => _search_all_day_data(dispatch, get_state, v.code, v.month)
+    )(bread_list)
 }
 
 export const action = {

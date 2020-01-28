@@ -46,6 +46,8 @@ import {
 
 import Theme from '../../theme'
 
+import State_view from '../../component/state_view'
+
 import {
     red,
     volcano,
@@ -74,7 +76,7 @@ const Head = () => (
         <Text style={{
             color: 'white',
             fontSize: 18,
-        }}>数据分析</Text>
+        }}>RC AI Analy</Text>
     </View>
 )
 
@@ -150,6 +152,26 @@ const BreedCurrentList = payload => {
 
 const SEARCH_INTERVAL = 60 * 1000
 
+const Title = payload => (
+    <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 15, paddingBottom: 0, paddingLeft: 5,}}>
+        <Text style={{color: Theme['title-color'], fontSize: 18, fontWeight: 'bold', }}>{payload.title}</Text>
+        <Icon style={{
+            marginRight: 10,
+            fontSize: 22,
+            color: Theme['void-color'],
+        }} name='right' color={Theme['primary-color']}/>
+    </View>
+)
+
+const Deal_tips = () => (
+    <View style={{borderBottomWidth: 0.3, borderBottomColor: Theme['border-defalut-color'],}}>
+        <Title title='交易提示'/>
+        <View style={{padding: 10,}}>
+
+        </View>
+    </View>
+)
+
 class Module extends Component {
 
     componentDidMount() {
@@ -159,6 +181,7 @@ class Module extends Component {
 
     componentWillUnmount() {
         clearInterval(this.timer_interval)
+        clearTimeout(this.timer_timeout)
     }
 
     render() {
@@ -184,7 +207,14 @@ class Module extends Component {
                     <Head/>
 
                     <ScrollView>
-                        <BreedCurrentList data={data} {...this.props}/>
+                        <State_view state={data[0]}/>
+
+                        <Deal_tips/>
+
+                        <View>
+                            <Title title='即时数据'/>
+                            <BreedCurrentList data={data} {...this.props}/>
+                        </View>
                     </ScrollView>
                 </View>
             </SafeAreaView>

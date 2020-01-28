@@ -1,4 +1,5 @@
 export default [
+    // 规则1
     {
         flow: '轻仓',
         bond: 100000,
@@ -12,4 +13,7 @@ export default [
         // 只可加一次
         add_count_max: 1,
     },
+
+    // 规则2
+    
 ]

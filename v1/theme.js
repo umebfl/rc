@@ -29,5 +29,7 @@ export default {
      'border-color-base': '#d9d9d9', // 边框色
      'box-shadow-base': '0 2px 8px rgba(0, 0, 0, 0.15)', // 浮层阴影
 
+     'void-color': '#d9d9d9', // 虚色
+
      'border-defalut-color': 'rgba(200, 200, 200, 0.5)', // 边框线条颜色
 }
