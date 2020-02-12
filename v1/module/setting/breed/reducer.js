@@ -179,12 +179,49 @@ const _search_all_day_data = (dispatch, get_state, code, month) => {
         const breed = R.filter(v => v.code === code)(module_state)
         const breed_index = R.findIndex(R.propEq('code', code))(module_state)
 
+        // [0] date
+        // [1] 开盘
+        // [2] 最高
+        // [3] 最低
+        // [4] 收盘
+        // [5] 成交量
         const all_day = R.compose(
-            R.map(
-                R.addIndex(R.map)(
-                    (v, k) => k === 0 ? v : parseInt(v)
-                ),
-            ),
+            list => R.addIndex(R.map)(
+                (v, k) => {
+                    const open = k === 0 ? parseInt(v[1]) : parseInt(list[k - 1][4])
+                    const high = open > parseInt(v[2]) ? open : parseInt(v[2])
+                    const low = open < parseInt(v[3]) ? open : parseInt(v[3])
+                    // [6] 开收盘波幅
+                    const ocrate = ((v[4] - v[1]) / v[1] * 100).toFixed(2)
+                    // [7] 最高最低波幅
+                    const hlrate = ((v[2] - v[3]) / v[2] * 100).toFixed(2)
+                    // [8] 波幅差
+                    const rate_gap = (hlrate - Math.abs(ocrate)).toFixed(2)
+
+                    const data = [
+                        // [0] date
+                        v[0],
+                        // [1] 开盘
+                        open,
+                        // [2] 最高
+                        high, //high,
+                        // [3] 最低
+                        low, //low,
+                        // [4] 收盘
+                        parseInt(v[4]),
+                        // [5] 成交量
+                        parseInt(v[5]),
+                        // [6] 开收盘波幅
+                        ocrate,
+                        // [7] 最高最低波幅
+                        hlrate,
+                        // [8] 波幅差
+                        rate_gap,
+                    ]
+
+                    return data
+                }
+            )(list),
             // 更新最后一天的收盘价为当前价
             v => {
                 v[v.length - 1][4] = breed[0].最新价
@@ -197,8 +234,8 @@ const _search_all_day_data = (dispatch, get_state, code, month) => {
         const all_day_chart = R.compose(
             // 划分 只保留收盘价
             v => ({
-                x:R.map(
-                    v => v[0]
+                x: R.addIndex(R.map)(
+                    (v1, k1) => ({v: v1[0], k: k1})
                 )(v),
                 y: R.map(
                     v => parseInt(v[4])
@@ -206,14 +243,56 @@ const _search_all_day_data = (dispatch, get_state, code, month) => {
             }),
         )(all_day)
 
+        // 40天图表数据
+        const day_40_chart = {
+            x: R.takeLast(40)(all_day_chart.x),
+            y: R.takeLast(40)(all_day_chart.y),
+        }
+
+        // hight chart
+        const all_day_high_chart = R.compose(
+            v => ({
+                x: R.addIndex(R.map)(
+                    (v1, k1) => ({v: v1[0], k: k1})
+                )(v),
+                y: R.map(
+                    v => parseInt(v[2])
+                )(v)
+            }),
+        )(all_day)
+
+        const day_40_high_chart = {
+            x: R.takeLast(40)(all_day_high_chart.x),
+            y: R.takeLast(40)(all_day_high_chart.y),
+        }
+
+        // low chart
+        const all_day_low_chart = R.compose(
+            v => ({
+                x: R.addIndex(R.map)(
+                    (v1, k1) => ({v: v1[0], k: k1})
+                )(v),
+                y: R.map(
+                    v => parseInt(v[3])
+                )(v)
+            }),
+        )(all_day)
+
+        const day_40_low_chart = {
+            x: R.takeLast(40)(all_day_low_chart.x),
+            y: R.takeLast(40)(all_day_low_chart.y),
+        }
+
         // 执行测算
         const ai_cal_rv = R.map(
             v => ai_cal(all_day, v)
         )(rule_list)
 
         // 执行统计
+        const ai_cal_analy = {}
 
         // 执行交易提示
+        const ai_deal_tips = {}
 
         dispatch(
             module_setter({
@@ -223,7 +302,17 @@ const _search_all_day_data = (dispatch, get_state, code, month) => {
                         ...v,
                         all_day,
                         all_day_chart,
-                        ai_cal_rv,
+                        day_40_chart,
+                        all_day_high_chart,
+                        day_40_high_chart,
+                        all_day_low_chart,
+                        day_40_low_chart,
+
+                        ai: {
+                            ai_cal_rv,
+                            ai_cal_analy,
+                            ai_deal_tips,
+                        },
                     })
                 )(module_state),
             })

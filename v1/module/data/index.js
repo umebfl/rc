@@ -47,6 +47,7 @@ import {
 import Theme from '../../theme'
 
 import State_view from '../../component/state_view'
+import HeadTitle from '../../component/head_title'
 
 import {
     red,
@@ -80,6 +81,7 @@ const Head = () => (
     </View>
 )
 
+// 打开列表展示
 const BreedCurrentList = payload => {
 
     const data = payload.data
@@ -152,25 +154,80 @@ const BreedCurrentList = payload => {
 
 const SEARCH_INTERVAL = 60 * 1000
 
-const Title = payload => (
-    <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 15, paddingBottom: 0, paddingLeft: 5,}}>
-        <Text style={{color: Theme['title-color'], fontSize: 18, fontWeight: 'bold', }}>{payload.title}</Text>
-        <Icon style={{
-            marginRight: 10,
-            fontSize: 22,
-            color: Theme['void-color'],
-        }} name='right' color={Theme['primary-color']}/>
-    </View>
-)
-
 const Deal_tips = () => (
     <View style={{borderBottomWidth: 0.3, borderBottomColor: Theme['border-defalut-color'],}}>
-        <Title title='交易提示'/>
+        <HeadTitle title='交易提示'/>
         <View style={{padding: 10,}}>
 
         </View>
     </View>
 )
+
+const InfoList = payload => {
+
+    const data = R.filter(v => !v.disable)(payload.breed.data)
+    const navigation = payload.navigation
+
+    return (
+        <View>
+            <HeadTitle title='交易品种'/>
+
+            <View>
+                {
+                    R.addIndex(R.map)(
+                        (v, k) => (
+                            <TouchableOpacity key={k} activeOpacity={0.5} onPress={() => navigation.navigate('analy', {k})}>
+                                <View style={{
+                                    flexDirection: 'column',
+                                    borderBottomWidth: 0.3,
+                                    borderBottomColor: Theme['border-defalut-color'],
+                                    paddingLeft: 10,
+                                    paddingRight: 10,
+                                }}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+                                        <View style={{flexDirection: 'row', paddingTop: 18, paddingBottom: 18}}>
+                                            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                                <Text style={{width: 30, fontSize: 16, color: blue[6]}}>{`${v.name}`}</Text>
+                                                <View style={{width: 60, flexDirection: 'row', justifyContent: 'flex-end', }}>
+                                                    <Text style={{fontSize: 14, color: Theme['text-color-secondary']}}>{`${v.code}${v.month}`}</Text>
+                                                </View>
+                                                {
+                                                    v.最新价
+                                                        ? (
+                                                            <View style={{flexDirection: 'row', }}>
+                                                                <View style={{width: 55, flexDirection: 'row', justifyContent: 'flex-end', }}>
+                                                                    <Text style={{
+                                                                        fontSize: 14,
+                                                                        color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                                                                    }}>{v.最新价}</Text>
+                                                                </View>
+                                                                <View style={{width: 60, flexDirection: 'row', justifyContent: 'flex-end', }}>
+                                                                    <Icon style={{
+                                                                        fontSize: 14,
+                                                                        color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                                                                    }} name={v.最新价 > v.开盘价 ? 'arrow-up' : 'arrow-down'} color={Theme['primary-color']}/>
+
+                                                                    <Text style={{
+                                                                        fontSize: 14,
+                                                                        color: v.最新价 > v.开盘价 ? red[5] : green[5],
+                                                                    }}>{Math.abs((v.最新价 - v.开盘价) / v.开盘价 * 100).toFixed(2)}%</Text>
+                                                                </View>
+                                                            </View>
+                                                        )
+                                                        : null
+                                                }
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    )(data)
+                }
+            </View>
+        </View>
+    )
+}
 
 class Module extends Component {
 
@@ -181,7 +238,7 @@ class Module extends Component {
 
     componentWillUnmount() {
         clearInterval(this.timer_interval)
-        clearTimeout(this.timer_timeout)
+        // clearTimeout(this.timer_timeout)
     }
 
     render() {
@@ -207,14 +264,21 @@ class Module extends Component {
                     <Head/>
 
                     <ScrollView>
-                        <State_view state={data[0]}/>
 
-                        <Deal_tips/>
+                        <InfoList {...this.props}/>
 
-                        <View>
-                            <Title title='即时数据'/>
-                            <BreedCurrentList data={data} {...this.props}/>
-                        </View>
+                        {
+                            // <Deal_tips/>
+                            //
+                            // <View>
+                            //     <HeadTitle title='即时数据'/>
+                            //     <BreedCurrentList data={data} {...this.props}/>
+                            // </View>
+                        }
+
+                        {
+                            // <State_view state={data[0].ai ? data[0].ai : {}}/>
+                        }
                     </ScrollView>
                 </View>
             </SafeAreaView>

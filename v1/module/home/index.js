@@ -20,20 +20,6 @@ import Setting from '../setting'
 
 const AppNavigator = createMaterialBottomTabNavigator(
     {
-        note: {
-            screen: Note,
-            navigationOptions: {
-                title: '记录',
-                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-            },
-        },
-        deal: {
-            screen: Deal,
-            navigationOptions: {
-                title: '交易',
-                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='property-safety' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-            },
-        },
         data: {
             screen: Data,
             navigationOptions: {
@@ -41,6 +27,20 @@ const AppNavigator = createMaterialBottomTabNavigator(
                 tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='star' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },
+        note: {
+            screen: Note,
+            navigationOptions: {
+                title: '记录',
+                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+            },
+        },
+        // deal: {
+        //     screen: Deal,
+        //     navigationOptions: {
+        //         title: '交易',
+        //         tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='property-safety' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+        //     },
+        // },
         setting: {
             screen: Setting,
             navigationOptions: {

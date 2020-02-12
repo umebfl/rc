@@ -57,6 +57,11 @@ class Module extends Component {
             }}>
                 <StatusBar barStyle='light-content'/>
 
+                <ScrollView style={{
+                    flex: 1,
+                    backgroundColor: 'white',
+                }}>
+                </ScrollView>
             </SafeAreaView>
         )
     }
