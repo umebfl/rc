@@ -70,10 +70,66 @@ import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-vi
 
 import State_view from '../../../component/state_view'
 import HeadTitle from '../../../component/head_title'
+import SemLine from '../../../component/sem_line'
+
+import {to_rate} from '../../../lib/num'
 
 import Theme from '../../../theme'
 import {get_nav_opt} from '../../../router'
 import {action as breed_action} from '../../setting/breed/reducer'
+
+const SemPieChart = payload => (
+    <PieChart
+      data={[
+          {
+            name: `小于1波幅 ${to_rate(payload.all_day.length, payload.data.lv0.length, 0)}%`,
+            population: payload.data.lv0.length,
+            color: blue[3],
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 10
+          },
+          {
+            name: `小于2波幅 ${to_rate(payload.all_day.length, payload.data.lv1.length, 0)}%`,
+            population: payload.data.lv1.length,
+            color: blue[5],
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 10
+          },
+          {
+            name: `小于3波幅 ${to_rate(payload.all_day.length, payload.data.lv2.length, 0)}%`,
+            population: payload.data.lv2.length,
+            color: blue[7],
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 10
+          },
+          {
+            name: `大于3波幅 ${to_rate(payload.all_day.length, payload.data.lv3.length, 0)}%`,
+            population: payload.data.lv3.length,
+            color: blue[9],
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 10
+          },
+        ]}
+      width={Dimensions.get('window').width - 20}
+      height={160}
+      chartConfig={{
+            backgroundColor: 'white',
+            backgroundGradientFrom: 'white',
+            backgroundGradientTo: 'white',
+            color: (opacity = 0.75) => `rgb(24, 144, 255, ${opacity})`,
+        }}
+      accessor='population'
+      backgroundColor='transparent'
+      paddingLeft='15'
+      absolute
+    />
+)
+
+const StatisticsSemLineChart = ({data}) => (
+    <SemLine
+        x={['1%', '2%', '3%', '3%以上']}
+        y={[data.lv0.length, data.lv1.length, data.lv2.length, data.lv3.length, ]}/>
+)
 
 const ContentView = payload => {
 
@@ -111,8 +167,124 @@ const ContentView = payload => {
                 <View style={{padding: 10, paddingTop: 0, flexDirection: 'row', alignItems: 'baseline'}}>
                     <Text style={{fontSize: 14, color: Theme['text-color-secondary']}}>杠杆：{(1 / breed.rate).toFixed(2)}</Text>
                     <Text style={{fontSize: 14, paddingLeft: 10, color: Theme['text-color-secondary']}}>保证金：{breed.当前一手保证金}</Text>
+                    <Text style={{fontSize: 14, paddingLeft: 10, color: Theme['text-color-secondary']}}>持仓额：{(breed.当前持仓总金额 / 100000000).toFixed(2)}亿</Text>
                     <Text style={{fontSize: 14, paddingLeft: 10, color: Theme['text-color-secondary']}}>系数：-</Text>
                 </View>
+
+                {
+                    all_day
+                        ? (
+                            <View>
+                                <HeadTitle title='统计'/>
+                                <View style={{flexDirection: 'column', padding: 4, paddingTop: 8, }}>
+                                    <View style={{paddingLeft: 10,}}>
+                                        <Text style={{fontSize: 15, color: Theme['title-color']}}>开收盘波幅分段统计({breed.all_day.length})</Text>
+                                    </View>
+                                    {
+                                        // <View style={{flexDirection: 'row', padding: 4, justifyContent: 'space-around', }}>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>0-1%: {to_rate(breed.all_day.length, breed.statistics_ocrate.lv0.length, 0)}%</Text>
+                                        //     </View>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>1-2%: {to_rate(breed.all_day.length, breed.statistics_ocrate.lv1.length, 0)}%</Text>
+                                        //     </View>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>2-3%: {to_rate(breed.all_day.length, breed.statistics_ocrate.lv2.length, 0)}%</Text>
+                                        //     </View>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>3%以上: {to_rate(breed.all_day.length, breed.statistics_ocrate.lv3.length, 0)}%</Text>
+                                        //     </View>
+                                        // </View>
+                                    }
+                                    {
+                                        // <SemPieChart data={breed.statistics_ocrate} all_day={breed.all_day}/>
+                                    }
+                                    <StatisticsSemLineChart data={breed.statistics_ocrate}/>
+                                </View>
+                                <View style={{flexDirection: 'column', padding: 4, paddingTop: 8,}}>
+                                    <View style={{paddingLeft: 10,}}>
+                                        <Text style={{fontSize: 15, color: Theme['title-color']}}>最高最低波幅分段统计</Text>
+                                    </View>
+                                    {
+                                        // <View style={{flexDirection: 'row', padding: 4, justifyContent: 'space-around', }}>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>0-1%: {to_rate(breed.all_day.length, breed.statistics_hlrate.lv0.length, 0)}%</Text>
+                                        //     </View>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>1-2%: {to_rate(breed.all_day.length, breed.statistics_hlrate.lv1.length, 0)}%</Text>
+                                        //     </View>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>2-3%: {to_rate(breed.all_day.length, breed.statistics_hlrate.lv2.length, 0)}%</Text>
+                                        //     </View>
+                                        //     <View>
+                                        //         <Text style={{color: Theme['text-color-secondary']}}>3%以上: {to_rate(breed.all_day.length, breed.statistics_hlrate.lv3.length, 0)}%</Text>
+                                        //     </View>
+                                        // </View>
+                                    }
+                                    {
+                                        // <SemPieChart data={breed.statistics_hlrate} all_day={breed.all_day}/>
+                                    }
+                                    <StatisticsSemLineChart data={breed.statistics_hlrate} all_day={breed.all_day}/>
+                                </View>
+
+                                <TouchableOpacity activeOpacity={0.5} onPress={() => payload.navigation.navigate('analy_nday_data', {breed})}>
+                                    <View style={{flexDirection: 'column', padding: 4, paddingBottom: 10, backgroundColor: 'white', }}>
+                                        <View style={{paddingLeft: 10, flexDirection: 'row', alignItems: 'center'}}>
+                                            <Text style={{color: Theme['primary-color']}}>40天价格分析</Text>
+                                            <Icon style={{
+                                                marginRight: 10,
+                                                fontSize: 22,
+                                                color: Theme['primary-color'],
+                                            }} name='right' color={Theme['primary-color']}/>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity activeOpacity={0.5} onPress={() => payload.navigation.navigate('statistics_shake_quotation', {breed})}>
+                                    <View style={{flexDirection: 'column', padding: 4, paddingBottom: 10, backgroundColor: 'white', }}>
+                                        <View style={{paddingLeft: 10, flexDirection: 'row', alignItems: 'center'}}>
+                                            <Text style={{fontSize: 16, color: Theme['primary-color']}}>连续同向价格分段</Text>
+                                            <Icon style={{
+                                                marginRight: 10,
+                                                fontSize: 22,
+                                                color: Theme['primary-color'],
+                                            }} name='right' color={Theme['primary-color']}/>
+                                        </View>
+
+                                        <View style={{flexDirection: 'column', paddingTop: 8,}}>
+                                            <View style={{paddingLeft: 10,}}>
+                                                <Text style={{fontSize: 15, color: Theme['title-color']}}>行情波幅分段统计({breed.statistics_shake_quotation.length})</Text>
+                                            </View>
+                                            <SemLine
+                                                x={breed.statistics_shake_quotation_rate_sem.x}
+                                                y={breed.statistics_shake_quotation_rate_sem.y}/>
+                                        </View>
+
+                                        <View style={{flexDirection: 'column', paddingTop: 8,}}>
+                                            <View style={{paddingLeft: 10,}}>
+                                                <Text style={{fontSize: 15, color: Theme['title-color']}}>行情平均波幅分段统计</Text>
+                                            </View>
+                                            <SemLine
+                                                x={breed.statistics_shake_quotation_sem_avg_sem.x}
+                                                y={breed.statistics_shake_quotation_sem_avg_sem.y}/>
+                                        </View>
+
+                                        <View style={{flexDirection: 'column', paddingTop: 8,}}>
+                                            <View style={{paddingLeft: 10,}}>
+                                                <Text style={{fontSize: 15, color: Theme['title-color']}}>行情天数分段统计</Text>
+                                            </View>
+                                            <SemLine
+                                                x={breed.statistics_shake_quotation_sem_day_sem.x}
+                                                y={breed.statistics_shake_quotation_sem_day_sem.y}/>
+                                        </View>
+
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                        : null
+                }
+
             </View>
 
             <View style={{paddingBottom: 10}}>
@@ -168,47 +340,47 @@ const ContentView = payload => {
 
             <View>
                 {
-                    !all_day_chart ? (
-                        <LineChart
-                            data={{
-                                labels: all_day_chart.x,
-                                datasets: [
-                                    {
-                                        data: all_day_chart.y,
-                                        color: (opacity = 0.5) => `rgba(255, 255, 255, ${opacity})`,
-                                        strokeWidth: 1
-                                    }
-                                ]
-                            }}
-                            width={Dimensions.get('window').width - 10} // from react-native
-                            height={220}
-                            withInnerLines={false}
-                            // fromZero={true}
-                            withVerticalLabels={false}
-                            withDots={false}
-                            yAxisLabel=''
-                            yAxisSuffix=''
-                            formatYLabel={v => parseInt(v)}
-                            bezier
-                            segments={6}
-                            chartConfig={{
-                                backgroundColor: 'white',
-                                backgroundGradientFrom: Theme['primary-color'],
-                                backgroundGradientTo: 'white',
-                                decimalPlaces: 2, // optional, defaults to 2dp
-                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                style: {
-                                    borderRadius: 4,
-                                },
-                            }}
-                            style={{
-                                marginLeft: 5,
-                                marginVertical: 8,
-                                borderRadius: 16
-                            }}
-                        />
-                    ) : null
+                    // !all_day_chart ? (
+                    //     <LineChart
+                    //         data={{
+                    //             labels: all_day_chart.x,
+                    //             datasets: [
+                    //                 {
+                    //                     data: all_day_chart.y,
+                    //                     color: (opacity = 0.5) => `rgba(255, 255, 255, ${opacity})`,
+                    //                     strokeWidth: 1
+                    //                 }
+                    //             ]
+                    //         }}
+                    //         width={Dimensions.get('window').width - 10} // from react-native
+                    //         height={220}
+                    //         withInnerLines={false}
+                    //         // fromZero={true}
+                    //         withVerticalLabels={false}
+                    //         withDots={false}
+                    //         yAxisLabel=''
+                    //         yAxisSuffix=''
+                    //         formatYLabel={v => parseInt(v)}
+                    //         bezier
+                    //         segments={6}
+                    //         chartConfig={{
+                    //             backgroundColor: 'white',
+                    //             backgroundGradientFrom: Theme['primary-color'],
+                    //             backgroundGradientTo: 'white',
+                    //             decimalPlaces: 2, // optional, defaults to 2dp
+                    //             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    //             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    //             style: {
+                    //                 borderRadius: 4,
+                    //             },
+                    //         }}
+                    //         style={{
+                    //             marginLeft: 5,
+                    //             marginVertical: 8,
+                    //             borderRadius: 16
+                    //         }}
+                    //     />
+                    // ) : null
                 }
             </View>
 

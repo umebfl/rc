@@ -207,7 +207,7 @@ const ShortDataList = payload => (
 
 class Module extends Component {
 
-    static navigationOptions = ({navigation}) => get_nav_opt(`${navigation.getParam('breed')['name']} - 规则1`)
+    static navigationOptions = ({navigation}) => get_nav_opt(`${navigation.getParam('breed')['name']} - 40天数据分析`)
 
     constructor() {
         super()
