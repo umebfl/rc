@@ -277,7 +277,7 @@ class Module extends Component {
                         }
 
                         {
-                            <State_view state={data}/>
+                            // <State_view state={data}/>
                         }
                     </ScrollView>
                 </View>
