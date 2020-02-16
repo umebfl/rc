@@ -9,6 +9,8 @@ import setting from './module/setting/reducer'
 import breed from './module/setting/breed/reducer'
 import {REHYDRATE_KEY} from './module/rehydrate'
 
+import power from './module/power/reducer'
+
 export const AUTH_SIGNOUT = 'redux_auth_signout'
 
 const app_reducer = combineReducers({
@@ -19,6 +21,8 @@ const app_reducer = combineReducers({
 
     setting,
     breed,
+
+    power,
 })
 
 const rootReducer = (state, action) => {

@@ -11,20 +11,45 @@ import {
 } from '@ant-design/react-native'
 
 import Theme from '../../theme'
-
-import Data from '../data'
-import Deal from '../deal'
 import Experiment from '../experiment'
 import Note from '../note'
-import Setting from '../setting'
+
+import Power from '../power'
+
+// import Deal from '../deal'
+
+// import Data from '../data'
+// import Setting from '../setting
 
 const AppNavigator = createMaterialBottomTabNavigator(
     {
-        data: {
-            screen: Data,
+        // data: {
+        //     screen: Data,
+        //     navigationOptions: {
+        //         title: 'RC',
+        //         tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='star' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+        //     },
+        // },
+        // // deal: {
+        // //     screen: Deal,
+        // //     navigationOptions: {
+        // //         title: '交易',
+        // //         tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='property-safety' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+        // //     },
+        // // },
+        // setting: {
+        //     screen: Setting,
+        //     navigationOptions: {
+        //         title: '设置',
+        //         tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='setting' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+        //     },
+        // },
+
+        power: {
+            screen: Power,
             navigationOptions: {
-                title: 'RC',
-                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='star' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+                title: 'AI能力',
+                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },
         note: {
@@ -32,20 +57,6 @@ const AppNavigator = createMaterialBottomTabNavigator(
             navigationOptions: {
                 title: '记录',
                 tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-            },
-        },
-        // deal: {
-        //     screen: Deal,
-        //     navigationOptions: {
-        //         title: '交易',
-        //         tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='property-safety' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-        //     },
-        // },
-        setting: {
-            screen: Setting,
-            navigationOptions: {
-                title: '设置',
-                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='setting' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
             },
         },
         experiment: {
@@ -57,7 +68,7 @@ const AppNavigator = createMaterialBottomTabNavigator(
         },
     },
     {
-        initialRouteName: 'data',
+        initialRouteName: 'power',
         shifting: false,
         labeled: true,
         activeColor: Theme['primary-color'],

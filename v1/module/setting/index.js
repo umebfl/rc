@@ -59,11 +59,11 @@ const Head = () => (
     </View>
 )
 
-const Element = ({data, handle_press}) => (
+const Element = ({data, navigation}) => (
     <ScrollView>
         <List>
             <Item
-                onPress={handle_press}
+                onPress={() => navigation.navigate('breed')}
                 arrow='horizontal'
                 extra={R.compose(v => v.length, R.filter(v => !v.disable))(data)}
                 thumb={
@@ -72,10 +72,10 @@ const Element = ({data, handle_press}) => (
                         fontSize: 28,
                     }} name='bar-chart' color={Theme['primary-color']}/>
                 }>
-            <Text style={{fontSize: 18, color: Theme['title-color']}}>交易品种</Text>
+                <Text style={{fontSize: 18, color: Theme['title-color']}}>交易品种</Text>
             </Item>
             <Item
-                onPress={handle_press}
+                onPress={() => navigation.navigate('breed')}
                 arrow='horizontal'
                 extra={'0'}
                 thumb={
@@ -84,7 +84,19 @@ const Element = ({data, handle_press}) => (
                         fontSize: 28,
                     }} name='transaction' color={Theme['primary-color']}/>
                 }>
-            <Text style={{fontSize: 18, color: Theme['title-color']}}>盈利资金分配</Text>
+                <Text style={{fontSize: 18, color: Theme['title-color']}}>盈利资金分配</Text>
+            </Item>
+            <Item
+                onPress={() => navigation.navigate('breed')}
+                arrow='horizontal'
+                extra={'0'}
+                thumb={
+                    <Icon style={{
+                        marginRight: 6,
+                        fontSize: 28,
+                    }} name='transaction' color={Theme['primary-color']}/>
+                }>
+                <Text style={{fontSize: 18, color: Theme['title-color']}}>目标筛选</Text>
             </Item>
         </List>
     </ScrollView>
@@ -121,7 +133,7 @@ class Module extends Component {
                     backgroundColor: 'white',
                 }}>
                     <Head/>
-                    <Element data={breed.data} handle_press={() => navigation.navigate('breed')}/>
+                    <Element data={breed.data} navigation={navigation}/>
                 </View>
             </SafeAreaView>
         )

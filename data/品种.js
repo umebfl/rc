@@ -74,7 +74,7 @@ export default [
     },
 
 
-    // 
+    // 忽略
 
     {
         code: 'CF',
