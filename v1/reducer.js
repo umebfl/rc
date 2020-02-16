@@ -1,26 +1,26 @@
 import * as R from 'ramda'
 import {combineReducers} from 'redux'
 
-import data from './module/data/reducer'
-import deal from './module/deal/reducer'
-import experiment from './module/experiment/reducer'
-import note from './module/note/reducer'
-import setting from './module/setting/reducer'
-import breed from './module/setting/breed/reducer'
+// import data from './module/data/reducer'
+// import deal from './module/deal/reducer'
+// import experiment from './module/experiment/reducer'
+// import note from './module/note/reducer'
+// import setting from './module/setting/reducer'
+// import breed from './module/setting/breed/reducer'
 import {REHYDRATE_KEY} from './module/rehydrate'
 
-import power from './module/power/reducer'
+import power from './power/reducer'
 
 export const AUTH_SIGNOUT = 'redux_auth_signout'
 
 const app_reducer = combineReducers({
-    data,
-    deal,
-    experiment,
-    note,
-
-    setting,
-    breed,
+    // data,
+    // deal,
+    // experiment,
+    // note,
+    //
+    // setting,
+    // breed,
 
     power,
 })

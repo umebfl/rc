@@ -35,4 +35,7 @@ export default {
      'void-color': '#d9d9d9', // 虚色
 
      'border-defalut-color': 'rgba(200, 200, 200, 0.5)', // 边框线条颜色
+
+     'D_颜色_白': 'rgba(200, 200, 200, 0.68)',
+     'D_颜色_白_L': 'rgba(200, 200, 200, 0.85)',
 }

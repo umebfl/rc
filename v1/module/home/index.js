@@ -14,7 +14,7 @@ import Theme from '../../theme'
 import Experiment from '../experiment'
 import Note from '../note'
 
-import Power from '../power'
+// import Power from '../../power'
 
 // import Deal from '../deal'
 
@@ -45,13 +45,13 @@ const AppNavigator = createMaterialBottomTabNavigator(
         //     },
         // },
 
-        power: {
-            screen: Power,
-            navigationOptions: {
-                title: 'AI能力',
-                tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
-            },
-        },
+        // power: {
+        //     screen: Power,
+        //     navigationOptions: {
+        //         title: 'AI能力',
+        //         tabBarIcon: ({focused, horizontal, tintColor}) => <Icon name='read' size='md' color={focused ? Theme['primary-color'] : tintColor}/>,
+        //     },
+        // },
         note: {
             screen: Note,
             navigationOptions: {

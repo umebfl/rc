@@ -9,6 +9,7 @@ export default (url, cb) => {
         }
 
         if (request.status === 200) {
+            // console.log('ajax success')
             cb && cb(request.responseText)
         } else {
             Toast.fail('请求接口数据异常！')

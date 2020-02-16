@@ -35,11 +35,17 @@ import {
     connect,
 } from 'react-redux'
 
-import {
-    action,
-} from './reducer'
+// import {
+//     action,
+// } from './reducer'
 
-import Theme from '../../theme'
+import Theme from '../../../theme'
+
+import V_星空背景面板 from '../../通用组件/V_星空背景面板'
+
+import {
+    V_目标筛选,
+} from './组件'
 
 class Module extends Component {
 
@@ -50,19 +56,11 @@ class Module extends Component {
         } = this.props
 
         return (
-            <SafeAreaView style={{
-                flex: 1,
-                backgroundColor: Theme['primary-color'],
-                flexDirection: 'column',
-            }}>
-                <StatusBar barStyle='light-content'/>
-
-                <ScrollView style={{
-                    flex: 1,
-                    backgroundColor: 'white',
-                }}>
-                </ScrollView>
-            </SafeAreaView>
+            <V_星空背景面板>
+                <View style={{flexDirection: 'row', justifyContent: 'flex-end', padding: 4,}}>
+                    <V_目标筛选 {...this.props}/>
+                </View>
+            </V_星空背景面板>
         )
     }
 }
@@ -71,7 +69,7 @@ export default connect(
     state => ({
         data: state.data,
     }),
-    dispatch => ({
-        action: bindActionCreators(action, dispatch),
-    })
+    // dispatch => ({
+    //     action: bindActionCreators(action, dispatch),
+    // })
 )(Module)
